@@ -1,0 +1,94 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+use App\Models\Food\RecordType;
+
+return new class extends Migration {
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        // many-to-many pivot table
+        Schema::create('food_coach_client', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('coach_id')->constrained('users');
+            $table->foreignId('client_id')->constrained('users');   
+        });
+
+        // Examples: Bellini, Перцы, Овощи, Сладкое, Протеиновые батончики, Напитки
+        Schema::create('food_groups', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained();
+            $table->timestamps();
+            $table->string('name');
+            $table->string('color', 6)->default('ffffff');
+        });
+
+        // Example: Блинчики с творогом
+        Schema::create('food_items', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->foreignId('user_id')->constrained();
+            $table->string('name');
+            $table->double('proteins');
+            $table->double('fats');
+            $table->double('carbs');
+            $table->double('calories');
+            $table->double('piece_mass')->nullable();
+        });
+
+        // many-to-many pivot table
+        Schema::create('food_group_item', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('group_id')->constrained('food_groups');
+            $table->foreignId('item_id')->constrained('food_items');
+        });
+
+        // a separate table for each day allows to assign it comments
+        Schema::create('food_days', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->date('date');
+            $table->foreignId('user_id')->constrained();
+        });
+
+        // allows adding personal notes as well as disscussing the diet with a coach
+        Schema::create('food_comments', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->foreignId('day_id')->constrained('food_days');
+            $table->foreignId('user_id')->constrained();
+            $table->text('text');
+        });
+
+        // Example: Обед
+        Schema::create('food_meals', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->integer('position');
+            $table->foreignId('day_id')->constrained('food_days');
+        });
+
+        // Example: Блинчики с творогом 1 шт.
+        Schema::create('food_records', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->foreignId('meal_id')->constrained('food_meals');
+            $table->foreignId('item_id')->constrained('food_items');
+            $table->enum('type', array_column(RecordType::cases(), 'value'));
+            $table->integer('value');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('food_tables');
+    }
+};
