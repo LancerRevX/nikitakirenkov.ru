@@ -5,7 +5,7 @@ namespace App\Http\Resources\Food;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DayResource extends JsonResource
+class RecordResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,11 +15,9 @@ class DayResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'date' => $this->date,
-            'meals' => MealResource::collection(
-                $this->meals->sortBy('position')
-            ),
+            'item' => new ItemResource($this->item),
+            'type' => $this->type,
+            'value' => $this->value,
             'mass' => $this->mass,
             'proteins' => $this->proteins,
             'fats' => $this->fats,

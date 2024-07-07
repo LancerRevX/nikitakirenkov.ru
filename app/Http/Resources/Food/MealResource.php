@@ -5,7 +5,7 @@ namespace App\Http\Resources\Food;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ItemResource extends JsonResource
+class MealResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,17 +16,15 @@ class ItemResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'position' => $this->position,
+            'records' => RecordResource::collection(
+                $this->records->sortBy('position')
+            ),
+            'mass' => $this->mass,
             'proteins' => $this->proteins,
             'fats' => $this->fats,
             'carbs' => $this->carbs,
             'calories' => $this->calories,
-            'pieceMass' => $this->whenNotNull($this->piece_mass),
-            'pieceProteins' => $this->whenNotNull($this->piece_proteins),
-            'pieceFats' => $this->whenNotNull($this->piece_fats),
-            'pieceCarbs' => $this->whenNotNull($this->piece_carbs),
-            'pieceCalories' => $this->whenNotNull($this->piece_calories),
-            'groups' => GroupResource::collection($this->whenLoaded('groups')),
         ];
     }
 }

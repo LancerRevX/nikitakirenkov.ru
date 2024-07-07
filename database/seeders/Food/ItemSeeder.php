@@ -4,7 +4,7 @@ namespace Database\Seeders\Food;
 
 use App\Models\Food\Group;
 use App\Models\Food\Item;
-use App\Models\Food\User;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 

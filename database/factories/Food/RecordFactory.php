@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class RecordFactory extends Factory
 {
+    private $position = 0;
+
     /**
      * Define the model's default state.
      *
@@ -32,6 +34,7 @@ class RecordFactory extends Factory
             'item_id' => $item->id,
             'type' => $type,
             'value' => $value,
+            'position' => $this->position++,
         ];
     }
 }

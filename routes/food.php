@@ -1,12 +1,15 @@
 <?php
 
+use App\Http\Resources\Food\DayResource;
 use App\Http\Resources\Food\GroupResource;
+use App\Models\Day;
 use App\Models\Food\Group;
-use App\Models\Food\User;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('food')->group(function () {
+Route::prefix('food')->middleware('auth')->group(function () {
     Route::get('groups', function() {
         return GroupResource::collection(Group::with('items')->get());
     });
@@ -21,5 +24,9 @@ Route::prefix('food')->group(function () {
         error_log(session()->id());
         $user = Auth::user();
         return $user;
+    });
+
+    Route::get('users/{user}/days', function (User $user) {
+        return DayResource::collection($user->days);
     });
 });

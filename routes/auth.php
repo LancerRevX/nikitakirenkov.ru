@@ -1,18 +1,19 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
-Route::prefix('auth')->group(function () {
+Route::prefix('auth')->controller(AuthController::class)->group(function () {
     Route::middleware('guest')->group(function () {
-        Route::post('log-in', function (Request $request) {
-            error_log($request->session()->get('key'));
-            Auth::login(User::find(1));
-            return response('successfully logged in', 200)->cookie(
-                cookie('name', 'value', 120)
-            );
-        });
+        Route::post('log-in', 'logIn');
+    });
+    Route::middleware('auth')->group(function () {
+        Route::post('log-out', 'logOut');
     });
 });

@@ -8,15 +8,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
-use App\Models\Food;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+    use Food\UserTrait;
 
-    public function foodUser(): HasOne
+    public function days(): HasMany
     {
-        return $this->hasOne(Food\User::class, 'base_user_id');
+        return $this->hasMany(Day::class);
     }
 }

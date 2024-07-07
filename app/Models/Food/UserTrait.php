@@ -2,17 +2,15 @@
 
 namespace App\Models\Food;
 
-use App\Models\User as BaseUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends BaseUser
+trait UserTrait
 {
-    use HasFactory;
-
     public function coaches(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -31,10 +29,5 @@ class User extends BaseUser
             'coach_id',
             'client_id'
         );
-    }
-
-    public function days(): HasMany
-    {
-        return $this->hasMany(Day::class);
     }
 }

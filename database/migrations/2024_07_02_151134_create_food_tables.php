@@ -48,19 +48,11 @@ return new class extends Migration {
             $table->foreignId('item_id')->constrained('food_items');
         });
 
-        // a separate table for each day allows to assign it comments
-        Schema::create('food_days', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->date('date');
-            $table->foreignId('user_id')->constrained();
-        });
-
         // allows adding personal notes as well as disscussing the diet with a coach
         Schema::create('food_comments', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('day_id')->constrained('food_days');
+            $table->foreignId('day_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->text('text');
         });
@@ -70,7 +62,7 @@ return new class extends Migration {
             $table->id();
             $table->timestamps();
             $table->integer('position');
-            $table->foreignId('day_id')->constrained('food_days');
+            $table->foreignId('day_id')->constrained();
         });
 
         // Example: Блинчики с творогом 1 шт.
@@ -81,6 +73,7 @@ return new class extends Migration {
             $table->foreignId('item_id')->constrained('food_items');
             $table->enum('type', array_column(RecordType::cases(), 'value'));
             $table->integer('value');
+            $table->integer('position');
         });
     }
 

@@ -3,10 +3,10 @@
 namespace Database\Seeders\Food;
 
 use App\Models\Food\Comment;
-use App\Models\Food\Day;
+use App\Models\Day;
 use App\Models\Food\Meal;
 use App\Models\Food\Record;
-use App\Models\Food\User;
+use App\Models\User;
 use DateTime;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
