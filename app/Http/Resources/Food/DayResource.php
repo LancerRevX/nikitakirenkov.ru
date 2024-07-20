@@ -14,9 +14,16 @@ class DayResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $date = $this->date;
+        $userLocale = $request->getPreferredLanguage();
+        if (isset($userLocale)) {
+            $date->setLocale($userLocale);
+        }
         return [
-            'id' => $this->id,
-            'date' => $this->date,
+            // 'id' => $this->id,
+            'date' => $date,
+            'prettyDate' => $date->isoFormat('L'),
+            'weekDay' => $date->dayName,
             'meals' => MealResource::collection(
                 $this->meals->sortBy('position')
             ),

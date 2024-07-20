@@ -12,6 +12,24 @@ return new class extends Migration {
      */
     public function up(): void
     {
+        Schema::table('food_diets', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('name');
+            $table->double('min_proteins')->nullable();
+            $table->double('min_fats')->nullable();
+            $table->double('min_carbs')->nullable();
+            $table->double('min_calories')->nullable();
+            $table->double('max_proteins')->nullable();
+            $table->double('max_fats')->nullable();
+            $table->double('max_carbs')->nullable();
+            $table->double('max_calories')->nullable();
+        });
+
+        Schema::table('days', function (Blueprint $table) {
+            $table->foreignId('diet_id')->nullable()->constrained('diets');
+        });
+
         // many-to-many pivot table
         Schema::create('food_coach_client', function (Blueprint $table) {
             $table->id();
@@ -32,20 +50,13 @@ return new class extends Migration {
         Schema::create('food_items', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('group_id')->constrained('food_groups');
             $table->string('name');
             $table->double('proteins');
             $table->double('fats');
             $table->double('carbs');
             $table->double('calories');
             $table->double('piece_mass')->nullable();
-        });
-
-        // many-to-many pivot table
-        Schema::create('food_group_item', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('group_id')->constrained('food_groups');
-            $table->foreignId('item_id')->constrained('food_items');
         });
 
         // allows adding personal notes as well as disscussing the diet with a coach
@@ -61,8 +72,8 @@ return new class extends Migration {
         Schema::create('food_meals', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->integer('position');
             $table->foreignId('day_id')->constrained();
+            $table->integer('position');
         });
 
         // Example: Блинчики с творогом 1 шт.

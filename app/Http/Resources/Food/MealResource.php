@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class MealResource extends JsonResource
 {
+
     /**
      * Transform the resource into an array.
      *
@@ -27,4 +28,6 @@ class MealResource extends JsonResource
             'calories' => $this->calories,
         ];
     }
+
+    
 }

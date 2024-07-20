@@ -5,6 +5,7 @@ namespace App\Models\Food;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Item extends Model
@@ -21,9 +22,9 @@ class Item extends Model
         'piece_mass' => 'int',
     ];
 
-    public function groups(): BelongsToMany
+    public function group(): BelongsTo
     {
-        return $this->belongsToMany(Group::class, 'food_group_item');
+        return $this->belongsTo(Group::class);
     }
 
     public function pieceProteins(): Attribute

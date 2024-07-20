@@ -2,9 +2,11 @@
 
 namespace App\Models\Food;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Meal extends Model
@@ -12,6 +14,15 @@ class Meal extends Model
     use HasFactory;
 
     protected $table = 'food_meals';
+
+    protected $casts = [
+        // 'date' => 'date',
+    ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function records(): HasMany
     {

@@ -26,7 +26,7 @@ class ItemResource extends JsonResource
             'pieceFats' => $this->whenNotNull($this->piece_fats),
             'pieceCarbs' => $this->whenNotNull($this->piece_carbs),
             'pieceCalories' => $this->whenNotNull($this->piece_calories),
-            'groups' => GroupResource::collection($this->whenLoaded('groups')),
+            'group' => new GroupResource($this->group),
         ];
     }
 }

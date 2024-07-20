@@ -34,9 +34,8 @@ class ItemSeeder extends Seeder
                 continue;
             }
 
-            $item = Item::create([
+            $group->items()->create([
                 'name' => $line[0],
-                'user_id' => $user->id,
                 'proteins' => floatval(str_replace(',', '.', $line[1])),
                 'fats' => floatval(str_replace(',', '.', $line[2])),
                 'carbs' => floatval(str_replace(',', '.', $line[3])),
@@ -45,7 +44,6 @@ class ItemSeeder extends Seeder
                     ? null
                     : floatval(str_replace(',', '.', $line[5])),
             ]);
-            $group->items()->attach($item);
         }
 
         fclose($file);

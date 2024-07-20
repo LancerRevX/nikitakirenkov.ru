@@ -30,4 +30,9 @@ trait UserTrait
             'client_id'
         );
     }
+
+    public function meals(): HasMany
+    {
+        return $this->hasMany(Meal::class);
+    }
 }
