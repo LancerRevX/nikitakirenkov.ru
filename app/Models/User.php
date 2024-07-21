@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Traits\Food\UserTrait;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -16,7 +17,7 @@ use Illuminate\Support\Carbon;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
-    use Food\UserTrait;
+    use UserTrait;
 
     public function days(): HasMany
     {

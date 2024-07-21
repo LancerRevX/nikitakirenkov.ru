@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Food;
+namespace App\Enums\Food;
 
 enum RecordType: string {
     case Mass = 'mass';

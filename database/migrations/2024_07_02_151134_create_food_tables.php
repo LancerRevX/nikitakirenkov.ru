@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-use App\Models\Food\RecordType;
+use App\Enums\Food\RecordType;
 
 return new class extends Migration {
     /**
@@ -12,7 +12,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('food_diets', function (Blueprint $table) {
+        Schema::create('food_diets', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->string('name');
@@ -27,7 +27,7 @@ return new class extends Migration {
         });
 
         Schema::table('days', function (Blueprint $table) {
-            $table->foreignId('diet_id')->nullable()->constrained('diets');
+            $table->foreignId('diet_id')->nullable()->constrained('food_diets');
         });
 
         // many-to-many pivot table

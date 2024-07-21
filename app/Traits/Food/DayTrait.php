@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models\Food;
+namespace App\Traits\Food;
 
+use App\Models\Food\Comment;
+use App\Models\Food\Meal;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

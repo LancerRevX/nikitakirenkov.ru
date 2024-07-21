@@ -3,7 +3,7 @@
 namespace Database\Factories\Food;
 
 use App\Models\Food\Item;
-use App\Models\Food\RecordType;
+use App\Enums\Food\RecordType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
