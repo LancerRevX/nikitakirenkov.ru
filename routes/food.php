@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Food\DayController;
 use App\Http\Controllers\Food\MealController;
+use App\Http\Controllers\Food\RecordController;
 use App\Http\Resources\Food\DayResource;
 use App\Http\Resources\Food\GroupResource;
 use App\Http\Resources\Food\DayCollection;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('users/{user}/food')
     ->middleware('auth')
     ->scopeBindings()
+    ->namespace('food.')
     ->group(function () {
         Route::get('groups', function () {
             return GroupResource::collection(Group::with('items')->get());
@@ -27,19 +29,24 @@ Route::prefix('users/{user}/food')
         });
 
         Route::controller(DayController::class)->group(function () {
-            Route::get('days', 'index')->name('days.index');
-            Route::get('days/{day}', 'show')->name('days.show');
+            Route::get('days', 'index');
+            Route::get('days/{day}', 'show');
         });
 
-        Route::controller(MealController::class)->group(function () {
-            Route::post('days/{day}/meals', 'store')->name('meals.store');
-            Route::patch('days/{day}/meals/{meal}', 'update')->name(
-                'meals.update'
-            );
-            Route::delete('days/{day}/meals/{meal}', 'destroy')->name(
-                'meals.destroy'
-            );
-        });
+        Route::controller(MealController::class)
+            ->prefix('days/{day}/meals')
+            ->group(function () {
+                Route::post('', 'store');
+                Route::patch('{meal}', 'update');
+                Route::delete('{meal}', 'destroy');
+            });
 
-        
+        Route::controller(RecordController::class)
+            ->prefix('days/{day}/meals/{meal}/records')
+            ->group(function () {
+                Route::post('', 'store');
+                Route::get('{record}', 'show');
+                Route::patch('{record}', 'update');
+                Route::delete('{record}', 'destroy');
+            });
     });
