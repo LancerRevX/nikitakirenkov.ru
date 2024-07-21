@@ -18,6 +18,11 @@ class Record extends Model
         'type' => RecordType::class,
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'position';
+    }
+
     public function meal(): BelongsTo
     {
         return $this->belongsTo(Meal::class);

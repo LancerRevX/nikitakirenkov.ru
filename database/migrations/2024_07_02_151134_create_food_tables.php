@@ -72,6 +72,7 @@ return new class extends Migration {
         Schema::create('food_meals', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->softDeletes();
             $table->foreignId('day_id')->constrained();
             $table->integer('position');
         });
