@@ -1,0 +1,43 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-12 13:33+0700\n"
+"PO-Revision-Date: 2024-10-12 13:41+0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.5\n"
+
+#: .\food\models.py:5
+msgid "name"
+msgstr "имя"
+
+#: .\food\models.py:6
+msgid "protein"
+msgstr "белки"
+
+#: .\food\models.py:9 .\food\models.py:13
+msgid "diet"
+msgstr "диета"
+
+#: .\food\models.py:10
+msgid "diets"
+msgstr "диеты"
+
+#: .\food\models.py:16
+msgid "day"
+msgstr "день"
+
+#: .\food\models.py:17
+msgid "days"
+msgstr "дни"
