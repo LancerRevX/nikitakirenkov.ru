@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -47,6 +47,25 @@ class Day(models.Model):
     def __str__(self) -> str:
         return str(self.date)
 
+    @property
+    def protein(self):
+        return sum(record.protein for record in self.meals.all())
+
+    @property
+    def fat(self):
+        return sum(record.fat for record in self.meals.all())
+
+    @property
+    def carbs(self):
+        return sum(record.carbs for record in self.meals.all())
+
+    @property
+    def calories(self):
+        return sum(record.calories for record in self.meals.all())
+
+    def is_today(self):
+        return self.date == date.today()
+
     class Meta:
         verbose_name = _("day")
         verbose_name_plural = _("days")
@@ -92,9 +111,28 @@ class Group(models.Model):
         verbose_name_plural = _("groups")
 
 
+class ItemType(models.Model):
+    user = models.ForeignKey(
+        FoodUser, models.CASCADE, related_name="item_types", verbose_name=_("user")
+    )
+    name = models.CharField(_("name"), max_length=32)
+    color = models.CharField(_("color"), max_length=7)
+
+    def __str__(self):
+        return self.name
+
+
 class Item(models.Model):
     user = models.ForeignKey(
         FoodUser, models.CASCADE, related_name="items", verbose_name=_("user")
+    )
+    type = models.ForeignKey(
+        ItemType,
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_("type"),
+        related_name="items",
     )
     name = models.CharField(_("name"), max_length=256)
     # groups = models.ManyToManyField(
@@ -108,7 +146,12 @@ class Item(models.Model):
     pack_mass = models.FloatField(_("pack mass"), null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        result = self.name
+        if self.type is not None:
+            result = f"{self.type} {result}"
+        if self.groups.count() > 0:
+            result += f" [{', '.join(self.groups.values_list('name', flat=True))}]"
+        return result
 
     class Meta:
         verbose_name = _("item")
@@ -117,6 +160,8 @@ class Item(models.Model):
 
 
 class Meal(models.Model):
+    TAILWINDCSS_CLASSES = ["border-yellow-300", "border-cyan-300", "border-orange-300"]
+
     day = models.ForeignKey(
         Day, models.CASCADE, verbose_name=_("day"), related_name="meals"
     )
@@ -125,17 +170,36 @@ class Meal(models.Model):
     def __str__(self):
         return f"{self.day} - meal #{self.order}"
 
+    @property
+    def protein(self):
+        return sum(record.protein for record in self.records.all())
+
+    @property
+    def fat(self):
+        return sum(record.fat for record in self.records.all())
+
+    @property
+    def carbs(self):
+        return sum(record.carbs for record in self.records.all())
+
+    @property
+    def calories(self):
+        return sum(record.calories for record in self.records.all())
+
+    @property
+    def tailwindcss_border_class(self):
+        return self.TAILWINDCSS_CLASSES[self.order % len(self.TAILWINDCSS_CLASSES)]
+
     class Meta:
         verbose_name = _("meal")
         verbose_name_plural = _("meals")
 
 
 class Record(models.Model):
-    TYPES = {
-        "mass": _("Mass"),
-        "piece": _("Piece"),
-        "pack": _("Pack"),
-    }
+    class Type(models.TextChoices):
+        MASS = "mass", _("Mass")
+        PIECE = "piece", _("Piece")
+        PACK = "pack", _("Pack")
 
     meal = models.ForeignKey(
         Meal, models.CASCADE, verbose_name=_("meal"), related_name="records"
@@ -143,13 +207,13 @@ class Record(models.Model):
     item = models.ForeignKey(
         Item, models.PROTECT, verbose_name=_("item"), related_name="records"
     )
-    type = models.CharField(_("type"), max_length=5, choices=TYPES, default="mass")
+    type = models.CharField(_("type"), max_length=5, choices=Type, default=Type.MASS)
     value = models.FloatField(_("value"))
 
     def __str__(self):
-        if self.type == "mass":
+        if self.type == self.Type.MASS:
             return f"{self.item} {self.value}g"
-        elif self.type == "piece":
+        elif self.type == self.Type.PIECE:
             return (
                 str(self.item)
                 + " "
@@ -159,6 +223,31 @@ class Record(models.Model):
             return (
                 str(self.item) + " " + ngettext_lazy("%f pack", "%f packs", self.value)
             )
+
+    @property
+    def protein(self):
+        return self.item.protein * self.mass / 100.0
+
+    @property
+    def fat(self):
+        return self.item.fat * self.mass / 100.0
+
+    @property
+    def carbs(self):
+        return self.item.carbs * self.mass / 100.0
+
+    @property
+    def calories(self):
+        return self.item.calories * self.mass / 100.0
+
+    @property
+    def mass(self):
+        if self.type == self.Type.MASS:
+            return self.value
+        elif self.type == self.Type.PIECE:
+            return self.item.piece_mass * self.value
+        else:
+            return self.item.pack_mass * self.value
 
     class Meta:
         verbose_name = _("record")
