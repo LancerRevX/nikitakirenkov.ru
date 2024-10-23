@@ -9,7 +9,7 @@ from .. import models
 def load_food_items(apps, schema_editor):
     with open("food/csv/food.csv", encoding="utf-8") as file:
         reader = csv.reader(file)
-        user = User.objects.first()
+        user = User.objects.filter(username="nikita").get_or_create()[0]
         for row in reader:
             piece_mass = (
                 float(row[5].replace(",", ".").replace('"', "")) if row[5] else None

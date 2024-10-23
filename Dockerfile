@@ -1,0 +1,28 @@
+FROM ubuntu:latest
+
+RUN apt update
+RUN apt install python3 python3-venv -y
+RUN apt install apache2 libapache2-mod-wsgi-py3 -y
+
+# for psycopg2
+RUN apt install gcc libpq-dev python3-dev -y
+
+WORKDIR /var/www/html/
+RUN python3 -m venv .venv
+ENV PATH="/var/www/html/.venv/bin/:$PATH"
+
+RUN a2dissite 000-default
+
+COPY apache.conf /etc/apache2/sites-available/django.conf
+RUN a2ensite django
+
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY . .
+ENV STATIC_ROOT=/var/www/html/static/
+RUN python3 manage.py collectstatic
+
+RUN echo "python manage.py migrate" >> start_server.sh
+RUN echo "apachectl -DFOREGROUND" >> start_server.sh
+RUN chmod +x start_server.sh
