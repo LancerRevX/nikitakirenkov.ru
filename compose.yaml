@@ -7,8 +7,32 @@ services:
       - POSTGRES_PASSWORD=123
       - POSTGRES_DB=my_database
 
-  django:
-    build: .
+  django-dev:
+    build:
+      context: ./django/
+      dockerfile: ./dev.Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    environment:
+      - DEBUG=1
+      - DB_HOST=postgres
+      - DB_NAME=my_database
+      - DB_USER=postgres
+      - DB_PASSWORD=123
+    develop:
+      watch:
+        - path: ./django
+          action: sync
+          target: /var/www/html
+        - path: ./django/requirements.txt
+          action: rebuild
+    profiles:
+      - dev
+
+  django-deploy:
+    build: django
     ports:
       - "8000:80"
     depends_on:
@@ -19,4 +43,5 @@ services:
       - DB_NAME=my_database
       - DB_USER=postgres
       - DB_PASSWORD=123
-    command: bash ./start_server.sh
+    profiles:
+      - deploy
