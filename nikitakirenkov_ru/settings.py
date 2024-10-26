@@ -25,12 +25,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-t@^iuc40=bc_b0)zh@^ld5(v$4kr6_6r+ganat=+)oh9-mzxc1"
+SECRET_KEY = (
+    "django-insecure-t@^iuc40=bc_b0)zh@^ld5(v$4kr6_6r+ganat=+)oh9-mzxc1"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(environ["DEBUG"]) if environ.get("DEBUG") else True
+DEBUG = int(environ["DEBUG"])
 
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+if environ.get("ALLOWED_HOSTS"):
+    ALLOWED_HOSTS += environ["ALLOWED_HOSTS"].split(",")
 
 
 # Application definition
@@ -43,10 +47,16 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    "tailwind",
+    "theme",
     "django_browser_reload",
     "nested_admin",
     "food",
 ]
+
+TAILWIND_APP_NAME = "theme"
+
+NPM_BIN_PATH = "npm.cmd"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -85,8 +95,8 @@ WSGI_APPLICATION = "nikitakirenkov_ru.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": environ.get("DB_NAME"),
+        "ENGINE": environ["DB_ENGINE"],
+        "NAME": environ["DB_NAME"],
         "USER": environ.get("DB_USER"),
         "PASSWORD": environ.get("DB_PASSWORD"),
         "HOST": environ.get("DB_HOST"),

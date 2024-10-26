@@ -1,0 +1,32 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "django runserver",
+            "type": "shell",
+            "command": "python manage.py runserver",
+        },
+        {
+            "label": "django tailwind start",
+            "type": "shell",
+            "command": "python manage.py tailwind start",
+        },
+        {
+            "label": "django migrate",
+            "type": "shell",
+            "command": "python manage.py migrate",
+        },
+        {
+            "label": "django makemigrations",
+            "type": "shell",
+            "command": "python manage.py makemigrations",
+        },
+        {
+            "label": "pip install requirements",
+            "type": "shell",
+            "command": "pip install -r requirements.txt",
+        },
+    ]
+}

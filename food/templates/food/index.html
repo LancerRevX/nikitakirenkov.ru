@@ -1,4 +1,4 @@
-{% load static i18n %}
+{% load static i18n tailwind_tags %}
 {% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
@@ -7,14 +7,14 @@
         <meta name="keywords" content="">
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="{% static "food/output.css" %}" />
         <title>{% translate "food"|title %}</title>
+        {% tailwind_css %}
     </head>
     <body>
         <main class="flex flex-col max-w-screen-sm gap-8 pt-8 mx-auto">
             {% for day in days %}
                 <div>
-                    <div class="bg-green-300 flex gap-4 py-2 px-4 rounded-t-xl {% if day.is_today %}!bg-purple-300{% endif %}">
+                    <div class="bg-purple-300 flex gap-4 py-2 px-4 rounded-t-xl {% if day.is_today %}!bg-purple-300{% endif %}">
                         <span>{{ day.date|date:"SHORT_DATE_FORMAT" }}</span>
                         <span>{{ day.date|date:"l" }}</span>
                     </div>
