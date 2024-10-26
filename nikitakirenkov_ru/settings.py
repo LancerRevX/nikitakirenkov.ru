@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "django_browser_reload",
     "nested_admin",
     "food",
+    "tasks",
 ]
 
 TAILWIND_APP_NAME = "theme"
@@ -126,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "ru-RU"
+LANGUAGE_CODE = "en-US"
 
 TIME_ZONE = "Asia/Krasnoyarsk"
 

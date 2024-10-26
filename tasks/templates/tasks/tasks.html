@@ -1,0 +1,6 @@
+{% for task in tasks %}
+    <div>
+        <div>{{ task.text }}</div>
+        <div class="ml-4">{% include "tasks/tasks.html" with tasks=task.children.all %}</div>
+    </div>
+{% endfor %}

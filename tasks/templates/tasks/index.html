@@ -1,0 +1,35 @@
+{% load static i18n tailwind_tags %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+    <head>
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0">
+        <title>{% translate "tasks" %}
+            {% if current_group %}- {{ current_group.name }}{% endif %}
+        </title>
+        {% tailwind_css %}
+    </head>
+    <body>
+        <main class="p-2">
+            <nav class="flex flex-row gap-2">
+                {% for group in groups %}
+                    {% if group == current_group %}
+                        <div class="relative py-2 bg-green-200 px-4 min-w-24 text-center z-20 border-2 block border-b-0 border-green-400 rounded-t-lg before:absolute before:w-4 before:h-4 before:border-r-2 before:border-b-2 before:-left-4 before:bottom-0 before:rounded-br-lg before:border-green-400 before:shadow-green-200 before:shadow-[3px_3px_0_0] after:absolute after:w-4 after:h-4 after:border-l-2 after:border-b-2 after:border-green-400 after:rounded-bl-lg after:shadow-green-200 after:shadow-[-3px_3px_0_0] after:-right-4 after:bottom-0">
+                            {{ group.name }}
+                        </div>
+                    {% else %}
+                        <a class="block w-24 text-center"
+                           href="{% url "index-tasks" group_slug=group.slug %}">{{ group.name }}</a>
+                    {% endif %}
+                {% endfor %}
+            </nav>
+            <div class="z-10 mt-[-2px] bg-green-200 border-2 border-green-400 rounded-xl border-top">
+                <div class="max-w-sm mx-auto">{% include "tasks/tasks.html" %}</div>
+            </div>
+        </main>
+    </body>
+</html>

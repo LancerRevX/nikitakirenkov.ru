@@ -19,14 +19,36 @@
             "command": "python manage.py migrate",
         },
         {
+            "label": "django migrate zero",
+            "type": "shell",
+            "command": "python manage.py migrate ${input:app} zero",
+        },
+        {
             "label": "django makemigrations",
             "type": "shell",
             "command": "python manage.py makemigrations",
+        },
+        {
+            "label": "django createsuperuser",
+            "type": "shell",
+            "command": "python manage.py createsuperuser --username nikita --email nikitakirenkov@gmail.com",
+        },
+        {
+            "label": "django shell_plus",
+            "type": "shell",
+            "command": "python manage.py shell_plus",
         },
         {
             "label": "pip install requirements",
             "type": "shell",
             "command": "pip install -r requirements.txt",
         },
+    ],
+    "inputs": [
+        {
+            "id": "app",
+            "type": "promptString",
+            "description": "app name"
+        }
     ]
 }
