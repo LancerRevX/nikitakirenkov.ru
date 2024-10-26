@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 
 
 class Group(models.Model):
@@ -7,6 +8,9 @@ class Group(models.Model):
     name = models.CharField(_("name"), max_length=32)
     color = models.CharField(_("color"), max_length=7, null=True, blank=True)
     # can_be_failed = models.BooleanField(_("can be failed"), default=False)
+
+    def get_absolute_url(self):
+        return reverse("index-tasks", kwargs={"group_slug": self.slug})
 
     def __str__(self) -> str:
         return f"{self.name}"
@@ -33,6 +37,7 @@ class Task(models.Model):
         default=Status.ACTIVE,
         max_length=max(map(len, Status.values)),
     )
+    position = models.IntegerField(_("position"))
 
     datetime = models.DateTimeField(_("date and time"), null=True, blank=True)
     created_at = models.DateTimeField(_("created at"), auto_now_add=True)
@@ -47,3 +52,11 @@ class Task(models.Model):
 
     def __str__(self) -> str:
         return f"{self.group.name}: {self.text}"
+
+    class Meta:
+        ordering = ["position"]
+        constraints = [
+            models.UniqueConstraint(
+                name="unique_position", fields=["parent", "position"]
+            )
+        ]

@@ -12,23 +12,34 @@
             {% if current_group %}- {{ current_group.name }}{% endif %}
         </title>
         {% tailwind_css %}
+        <!-- Alpine Plugins -->
+        <script defer
+                src="https://cdn.jsdelivr.net/npm/@alpinejs/sort@3.x.x/dist/cdn.min.js"></script>
+        <!-- Alpine Core -->
+        <script defer
+                src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="https://unpkg.com/htmx.org@2.0.3"
+                integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
+                crossorigin="anonymous"></script>
     </head>
-    <body>
-        <main class="p-2">
-            <nav class="flex flex-row gap-2">
+    <body hx-boost="true">
+        <main class="p-4">
+            <nav class="flex flex-row justify-center gap-2 mb-4">
                 {% for group in groups %}
                     {% if group == current_group %}
-                        <div class="relative py-2 bg-green-200 px-4 min-w-24 text-center z-20 border-2 block border-b-0 border-green-400 rounded-t-lg before:absolute before:w-4 before:h-4 before:border-r-2 before:border-b-2 before:-left-4 before:bottom-0 before:rounded-br-lg before:border-green-400 before:shadow-green-200 before:shadow-[3px_3px_0_0] after:absolute after:w-4 after:h-4 after:border-l-2 after:border-b-2 after:border-green-400 after:rounded-bl-lg after:shadow-green-200 after:shadow-[-3px_3px_0_0] after:-right-4 after:bottom-0">
+                        <div class="box-border flex flex-row items-center justify-center h-10 border-4 border-purple-400 bg-purple-100  text-purple-800 font-semibold min-w-24 rounded-xl">
                             {{ group.name }}
                         </div>
                     {% else %}
-                        <a class="block w-24 text-center"
+                        <a class="flex flex-row items-center justify-center h-10 border-2 font-semibold text-gray-600 border-gray-300 rounded-xl min-w-24"
                            href="{% url "index-tasks" group_slug=group.slug %}">{{ group.name }}</a>
                     {% endif %}
                 {% endfor %}
+                <a class="flex flex-row items-center justify-center h-10 border-2 border-lime-400 bg-lime-200 rounded-xl w-10"
+                   href="{% url "index-tasks" group_slug="none" %}">+</a>
             </nav>
-            <div class="z-10 mt-[-2px] bg-green-200 border-2 border-green-400 rounded-xl border-top">
-                <div class="max-w-sm mx-auto">{% include "tasks/tasks.html" %}</div>
+            <div class="max-w-sm mx-auto border-2 border-green-400 bg-green-100 p-4 rounded-xl">
+                {% include "tasks/tasks.html" %}
             </div>
         </main>
     </body>

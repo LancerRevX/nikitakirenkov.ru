@@ -64,6 +64,7 @@ class Migration(migrations.Migration):
                         verbose_name="status",
                     ),
                 ),
+                ("position", models.IntegerField("position")),
                 (
                     "datetime",
                     models.DateTimeField(
@@ -102,5 +103,17 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
+            options={
+                "constraints": [
+                    models.UniqueConstraint(
+                        name="unique_position", fields=["parent", "position"]
+                    ),
+                    models.UniqueConstraint(
+                        name="unique_position_with_null_parent",
+                        fields=["position"],
+                        condition=models.Q(parent=None),
+                    ),
+                ]
+            },
         ),
     ]

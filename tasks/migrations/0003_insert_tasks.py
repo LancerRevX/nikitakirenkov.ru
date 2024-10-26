@@ -36,12 +36,12 @@ BOOKS = [
 def insert_tasks(apps, schema_editor):
     Group = apps.get_model("tasks", "Group")
     books = Group.objects.get(slug="books")
-    for book_data in BOOKS:
+    for book_i, book_data in enumerate(BOOKS):
         book = books.tasks.create(
-            text=book_data["text"], status=book_data["status"]
+            text=book_data["text"], status=book_data["status"], position=book_i
         )
-        for child in book_data["children"]:
-            books.tasks.create(**child, parent=book)
+        for child_i, child in enumerate(book_data["children"]):
+            books.tasks.create(**child, parent=book, position=child_i)
 
 
 def delete_tasks(apps, schema_editor):

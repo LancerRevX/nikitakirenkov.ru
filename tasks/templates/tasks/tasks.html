@@ -1,6 +1,14 @@
-{% for task in tasks %}
-    <div>
-        <div>{{ task.text }}</div>
-        <div class="ml-4">{% include "tasks/tasks.html" with tasks=task.children.all %}</div>
-    </div>
-{% endfor %}
+<div class="flex flex-col gap-2"
+     x-sort="$dispatch('task-moved', {id: $item, position: $position})"
+     x-data>
+    {% for task in tasks %}
+        <div x-sort:item="{{ task.id }}">
+            {% include "tasks/task.html" %}
+            {% if task.children.count > 0 %}
+                <div class="mt-2 ml-8">
+                    {% include "tasks/tasks.html" with tasks=task.children.all %}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>

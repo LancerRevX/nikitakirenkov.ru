@@ -19,9 +19,9 @@ class TaskInline(admin.StackedInline):
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ["id", "text", "datetime"]
+    list_display = ["id", "position", "text", "datetime"]
     list_display_links = ["id"]
-    list_editable = ["text", "datetime"]
+    list_editable = ["position", "text", "datetime"]
     inlines = [TaskInline]
 
     def get_queryset(self, request: HttpRequest) -> QuerySet:

@@ -35,6 +35,7 @@ DEBUG = int(environ["DEBUG"])
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 if environ.get("ALLOWED_HOSTS"):
     ALLOWED_HOSTS += environ["ALLOWED_HOSTS"].split(",")
+CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://127.0.0.1"]
 
 
 # Application definition
