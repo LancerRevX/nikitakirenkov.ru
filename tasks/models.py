@@ -50,6 +50,14 @@ class Task(models.Model):
             return self.parent.get_status()
         return self.status
 
+    def is_status_editable(self):
+        if not self.parent:
+            return True
+        return self.parent.get_status() in [
+            self.Status.ACTIVE,
+            self.Status.IN_PROGRESS,
+        ]
+
     def __str__(self) -> str:
         if self.parent is None:
             return f"{self.group.name}#{self.position} {self.text}"

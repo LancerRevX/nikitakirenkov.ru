@@ -3,16 +3,20 @@
       hx-post="{% url "save-task" task_id=task.id %}"
       hx-swap="outerHTML"
       hx-trigger="submit,save-task"
-      x-data="{ editName: false, save() { $dispatch('submit'); editName = false; } }">
+      x-data="{ editName: false, status: '{{ task.status }}' }">
     {% csrf_token %}
     <input type="hidden"
            name="position"
            value="{{ task.position }}"
            @task-moved.window="if ($event.detail.id == {{ task.id }}) { $el.value = $event.detail.position; $dispatch('save-task') }">
+    <input type="hidden"
+           name="status"
+           :value="status">
     <div x-sort:handle>
         {% include "tasks/icons/ellipsis_horizontal.html" with class="size-4 opacity-0 group-hover:opacity-100 transition-all hover:text-gray-600 text-gray-400 cursor-pointer" %}
     </div>
-    <div class="border-2 border-gray-300 bg-white size-6 flex flex-row justify-center items-center">
+    <div class="border-2 border-gray-300 bg-white size-6 flex flex-row justify-center items-center"
+         @click="if (status == {{ task.Status.FINISHED }}) status)">
         {% with status=task.get_status %}
             {% if status == task.Status.FINISHED %}
                 {% include "tasks/icons/check.html" with class="size-6 text-green-600" %}
