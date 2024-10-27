@@ -2,7 +2,7 @@
       id="task-{{ task.id }}"
       hx-post="{% url "save-task" task_id=task.id %}"
       hx-swap="outerHTML"
-      hx-trigger="save-task"
+      hx-trigger="submit,save-task"
       x-data="{ editName: false, save() { $dispatch('submit'); editName = false; } }">
     {% csrf_token %}
     <input type="hidden"
@@ -29,9 +29,10 @@
            name="text"
            class="flex-1"
            value="{{ task.text }}"
+           x-ref="nameInput"
            x-show="editName">
     <div class="flex flex-row gap-2 text-gray-400 opacity-0 group-hover:opacity-100 transition-all">
-        <div @click="editName ? save() : editName = true">
+        <div @click="if (editName) { editName = false; $dispatch('save-task'); } else { editName = true; $focus.focus($refs.nameInput); $refs.nameInput.selectionStart = $refs.nameInput.selectionEnd = $refs.nameInput.value.length; }">
             {% include "tasks/icons/pencil_square.html" with class="size-4 hover:text-gray-600 cursor-pointer transition-all" %}
         </div>
         {% include "tasks/icons/x_mark.html" with class="size-4 hover:text-gray-600 cursor-pointer transition-all" %}

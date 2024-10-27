@@ -33,17 +33,27 @@ def index_tasks(request: HttpRequest, group_slug=None):
 # @require_POST
 def save_task(request: HttpRequest, task_id: int):
     task = get_object_or_404(Task, id=task_id)
+    old_position = task.position
     form = TaskForm(request.POST, instance=task)
     if not form.is_valid():
         return HttpResponseBadRequest()
 
-    task = form.save(commit=False)
-    with transaction.atomic():
-        parent = Task.objects.get(id=2)
-        task1 = Task.objects.get(parent=parent, position=1)
-        task2 = Task.objects.get(parent=parent, position=2)
-        task1.position, task2.position = task2.position, task1.position
-        task1.save()
-        task2.save()
+    task = form.save()
+    if task.position < old_position:
+        for sibling in Task.objects.filter(
+            position__gte=task.position,
+            position__lt=old_position,
+            parent=task.parent,
+        ).exclude(id=task.id):
+            sibling.position += 1
+            sibling.save()
+    elif task.position > old_position:
+        for sibling in Task.objects.filter(
+            position__lte=task.position,
+            position__gt=old_position,
+            parent=task.parent,
+        ).exclude(id=task.id):
+            sibling.position -= 1
+            sibling.save()
 
     return render(request, "tasks/task.html", {"task": task})

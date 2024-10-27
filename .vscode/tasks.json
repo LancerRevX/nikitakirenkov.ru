@@ -39,6 +39,11 @@
             "command": "python manage.py shell_plus",
         },
         {
+            "label": "django test",
+            "type": "shell",
+            "command": "python manage.py test",
+        },
+        {
             "label": "pip install requirements",
             "type": "shell",
             "command": "pip install -r requirements.txt",

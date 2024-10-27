@@ -51,7 +51,10 @@ class Task(models.Model):
         return self.status
 
     def __str__(self) -> str:
-        return f"{self.group.name}: {self.text}"
+        if self.parent is None:
+            return f"{self.group.name}#{self.position} {self.text}"
+        else:
+            return f"{self.parent.text}#{self.position} {self.text}"
 
     class Meta:
         ordering = ["position"]

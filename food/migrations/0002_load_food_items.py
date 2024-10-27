@@ -12,7 +12,9 @@ def load_food_items(apps, schema_editor):
         user = User.objects.filter(username="nikita").get_or_create()[0]
         for row in reader:
             piece_mass = (
-                float(row[5].replace(",", ".").replace('"', "")) if row[5] else None
+                float(row[5].replace(",", ".").replace('"', ""))
+                if row[5]
+                else None
             )
             item = models.Item(
                 user=user,
@@ -26,7 +28,6 @@ def load_food_items(apps, schema_editor):
             )
             item.full_clean()
             item.save()
-            print(f"added item {item}")
 
 
 class Migration(migrations.Migration):
