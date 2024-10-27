@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from os import environ
 
+from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -25,9 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = (
-    "django-insecure-t@^iuc40=bc_b0)zh@^ld5(v$4kr6_6r+ganat=+)oh9-mzxc1"
-)
+SECRET_KEY = "django-insecure-t@^iuc40=bc_b0)zh@^ld5(v$4kr6_6r+ganat=+)oh9-mzxc1"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(environ["DEBUG"])
@@ -37,6 +36,9 @@ if environ.get("ALLOWED_HOSTS"):
     ALLOWED_HOSTS += environ["ALLOWED_HOSTS"].split(",")
 CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://127.0.0.1"]
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 # Application definition
 
@@ -54,6 +56,7 @@ INSTALLED_APPS = [
     "nested_admin",
     "food",
     "tasks",
+    "users",
 ]
 
 TAILWIND_APP_NAME = "theme"
@@ -69,6 +72,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_browser_reload.middleware.BrowserReloadMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
 ]
 
 ROOT_URLCONF = "nikitakirenkov_ru.urls"
@@ -128,7 +132,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "en-US"
+LANGUAGE_CODE = "ru-RU"
+
+LANGUAGES = [
+    ("ru", _("Russian")),
+    ("en", _("English")),
+]
 
 TIME_ZONE = "Asia/Krasnoyarsk"
 

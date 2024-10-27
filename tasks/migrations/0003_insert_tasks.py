@@ -33,6 +33,17 @@ BOOKS = [
 ]
 
 
+PURCHASES = [
+    {"text": "Колодки", "status": Task.Status.FAILED},
+    {"text": "Кофеварка", "status": Task.Status.CANCELLED},
+    {"text": "Чайник", "status": Task.Status.FINISHED},
+    {"text": "Кошелёк", "status": Task.Status.QUESTIONED},
+    {"text": "Новый ПК", "status": Task.Status.IN_PROGRESS},
+    {"text": "Топливный фильтр", "status": Task.Status.FINISHED},
+    {"text": "Кастрюля", "status": Task.Status.ACTIVE},
+]
+
+
 def insert_tasks(apps, schema_editor):
     Group = apps.get_model("tasks", "Group")
     books = Group.objects.get(slug="books")
@@ -42,6 +53,10 @@ def insert_tasks(apps, schema_editor):
         )
         for child_i, child in enumerate(book_data["children"]):
             books.tasks.create(**child, parent=book, position=child_i)
+
+    purchases_group = Group.objects.get(slug="purchases")
+    for purchase_i, purchase_data in enumerate(PURCHASES):
+        purchases_group.tasks.create(**purchase_data, position=purchase_i)
 
 
 def delete_tasks(apps, schema_editor):

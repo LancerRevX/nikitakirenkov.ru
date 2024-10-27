@@ -30,7 +30,7 @@ def index_tasks(request: HttpRequest, group_slug=None):
     )
 
 
-# @require_POST
+@require_POST
 def save_task(request: HttpRequest, task_id: int):
     task = get_object_or_404(Task, id=task_id)
     old_position = task.position

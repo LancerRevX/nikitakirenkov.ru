@@ -1,9 +1,16 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
+from django.conf import settings
 
 
 class Group(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        models.CASCADE,
+        verbose_name=_("user"),
+        related_name="task_groups",
+    )
     slug = models.SlugField(_("slug"))
     name = models.CharField(_("name"), max_length=32)
     color = models.CharField(_("color"), max_length=7, null=True, blank=True)
@@ -21,8 +28,16 @@ class Task(models.Model):
         ACTIVE = "active", _("active")
         IN_PROGRESS = "in_progress", _("in progress")
         FINISHED = "finished", _("finished")
+        QUESTIONED = "questioned", _("questioned")
         FAILED = "failed", _("failed")
         CANCELLED = "cancelled", _("cancelled")
+
+    STATUS_ICON_TEMPLATE_NAMES = {
+        Status.FINISHED: "tasks/icons/check.html",
+        Status.IN_PROGRESS: "tasks/icons/dot.html",
+        Status.QUESTIONED: "tasks/icons/question_mark.html",
+        Status.FAILED: "tasks/icons/x_mark.html",
+    }
 
     group = models.ForeignKey(
         Group, models.CASCADE, verbose_name=_("group"), related_name="tasks"
@@ -42,6 +57,10 @@ class Task(models.Model):
     datetime = models.DateTimeField(_("date and time"), null=True, blank=True)
     created_at = models.DateTimeField(_("created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("updated at"), auto_now=True)
+
+    @property
+    def status_icon_template_name(self):
+        return self.STATUS_ICON_TEMPLATE_NAMES.get(self.get_status())
 
     def get_status(self) -> str:
         if not self.parent:
@@ -66,8 +85,3 @@ class Task(models.Model):
 
     class Meta:
         ordering = ["position"]
-        constraints = [
-            models.UniqueConstraint(
-                name="unique_position", fields=["parent", "position"]
-            )
-        ]
