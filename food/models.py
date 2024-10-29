@@ -95,7 +95,7 @@ class Comment(models.Model):
 
 class Group(models.Model):
     user = models.ForeignKey(
-        FoodUser, models.CASCADE, related_name="item_groups", verbose_name=_("user")
+        FoodUser, models.CASCADE, related_name="food_groups", verbose_name=_("user")
     )
     name = models.CharField(_("name"), max_length=32)
     color = models.CharField(_("color"), max_length=7)
@@ -160,15 +160,13 @@ class Item(models.Model):
 
 
 class Meal(models.Model):
-    TAILWINDCSS_CLASSES = ["border-yellow-300", "border-cyan-300", "border-orange-300"]
-
     day = models.ForeignKey(
         Day, models.CASCADE, verbose_name=_("day"), related_name="meals"
     )
-    order = models.IntegerField(default=0)
+    position = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.day} - meal #{self.order}"
+        return f"{self.day} - meal #{self.position}"
 
     @property
     def protein(self):
@@ -186,13 +184,10 @@ class Meal(models.Model):
     def calories(self):
         return sum(record.calories for record in self.records.all())
 
-    @property
-    def tailwindcss_border_class(self):
-        return self.TAILWINDCSS_CLASSES[self.order % len(self.TAILWINDCSS_CLASSES)]
-
     class Meta:
         verbose_name = _("meal")
         verbose_name_plural = _("meals")
+        ordering = ['position']
 
 
 class Record(models.Model):

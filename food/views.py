@@ -1,33 +1,39 @@
-from datetime import date, timedelta
+import datetime
+import urllib
+import urllib.parse
 
 from django.http import HttpRequest, HttpResponseBadRequest
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.views.decorators.http import require_GET, require_POST
+from django.contrib.auth.decorators import login_required
 
-from .forms import IndexForm
+from .forms import DayForm
 from .models import Day
 
-
+@require_GET
+@login_required
 def index(request: HttpRequest):
-    form = IndexForm(request.GET)
-    if not form.is_valid():
-        return HttpResponseBadRequest("BAD REQUEST!")
-    from_date: date = form.cleaned_data["from_date"]
-    to_date: date = form.cleaned_data["to_date"]
-    days = Day.objects.filter(date__range=(from_date, to_date)).order_by("date")
-    days = list(days)
-    temp_date = from_date
-    i = 0
-    while temp_date <= to_date:
-        if i >= len(days) or days[i].date != temp_date:
-            new_day = {
-                "date": temp_date,
-                "protein": 0.0,
-                "fat": 0.0,
-                "carbs": 0.0,
-                "calories": 0.0,
-                "meals": [],
-            }
-            days.insert(i, new_day)
-        temp_date += timedelta(1)
-        i += 1
-    return render(request, "food/index.html", {"days": days})
+    day_form = DayForm(request.GET)
+    if day_form.is_valid():
+        date = day_form.cleaned_data["date"]
+    else:
+        date = datetime.date.today()
+
+    day_query = Day.objects.filter(date=date)
+    if day_query.exists():
+        day = day_query.get()
+    else:
+        day = {"date": date}
+
+    return render(request, "food/index.html", {"day": day, 'user': request.user})
+
+@require_POST
+@login_required
+def store_meal(request: HttpRequest, date: datetime.date):
+    day = Day.objects.get_or_create(user=request.user, date=date)[0]
+
+    position = day.meals.count()
+    meal = day.meals.create(position=position)
+
+    return render(request, 'food/meal.html', {'meal': meal})

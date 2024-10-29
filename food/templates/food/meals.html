@@ -1,0 +1,8 @@
+{% load i18n %}
+{% cycle 'bg-green-300' 'bg-red-300' 'bg-blue-300' as bg_class silent %}
+{% cycle 'border-green-300' 'border-red-300' 'border-blue-300' as border_class silent %}
+{% for meal in day.meals.all %}
+    {% cycle bg_class %}
+    {% cycle border_class %}
+    {% include "food/meal.html" %}
+{% endfor %}

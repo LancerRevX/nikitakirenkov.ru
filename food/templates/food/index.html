@@ -8,113 +8,61 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{% translate "food"|title %}</title>
+        <script defer
+                src="https://cdn.jsdelivr.net/npm/@alpinejs/sort@3.x.x/dist/cdn.min.js"></script>
+        <script defer
+                src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+        <!-- Alpine Core -->
+        <script defer
+                src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="https://unpkg.com/htmx.org@2.0.3"
+                integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
+                crossorigin="anonymous"></script>
         {% tailwind_css %}
     </head>
-    <body>
-        <main class="flex flex-col max-w-screen-sm gap-8 pt-8 mx-auto">
-            {% for day in days %}
-                <div>
-                    <div class="bg-purple-300 flex gap-4 py-2 px-4 rounded-t-xl {% if day.is_today %}!bg-purple-300{% endif %}">
-                        <span>{{ day.date|date:"SHORT_DATE_FORMAT" }}</span>
-                        <span>{{ day.date|date:"l" }}</span>
-                    </div>
-                    <div class="min-h-10 border-x-2 border-green-300 p-4 flex flex-col gap-4 {% if day.is_today %}!border-purple-300{% endif %}">
-                        {% comment %} <div class="flex flex-row items-center border-2 border-green-300 rounded-xl  {% if day.is_today %}!border-purple-300{% endif %}">
-                            <div class="w-2/6 text-center">{% translate "name"|capfirst %}</div>
-                            {% include "food/separator.html" %}
-                            <div class="flex-1 text-center">{% translate "mass"|capfirst %}</div>
-                            {% include "food/separator.html" %}
-                            <div class="flex-1 text-center">{% translate "protein"|capfirst %}</div>
-                            {% include "food/separator.html" %}
-                            <div class="flex-1 text-center">{% translate "fat"|capfirst %}</div>
-                            {% include "food/separator.html" %}
-                            <div class="flex-1 text-center">{% translate "carbs"|capfirst %}</div>
-                            {% include "food/separator.html" %}
-                            <div class="flex-1 text-center">{% translate "calories"|capfirst %}</div>
-                        </div> {% endcomment %}
-                        {% for meal in day.meals.all %}
-                            <div class="min-h-10 rounded-xl border-2 {{ meal.tailwindcss_border_class }}">
-                                {% for record in meal.records.all %}
-                                    <div class="flex flex-row items-center border-b-2 py-1 last:border-none {{ meal.tailwindcss_border_class }}">
-                                        <div class="w-2/6 pl-2 overflow-hidden text-nowrap"
-                                             title="{{ record.item }}">{{ record.item|capfirst }}</div>
-                                        {% include "food/separator.html" %}
-                                        {% if record.type == record.Type.MASS %}
-                                            <div class="flex-1 text-center" title="{% translate "mass" %}">
-                                                {% blocktranslate with mass=record.value|floatformat %}{{ mass }}g{% endblocktranslate %}
-                                            </div>
-                                        {% elif record.type == record.Type.PIECE %}
-                                            <div class="flex-1 text-center" title="{% translate "pieces" %}">
-                                                {% blocktranslate with pieces=record.value|floatformat:-2 %}{{ pieces }} pieces{% endblocktranslate %}
-                                            </div>
-                                        {% elif record.type == record.Type.PACK %}
-                                            <div class="flex-1 text-center" title="{% translate "packs" %}">
-                                                {% blocktranslate with packs=record.value %}{{ packs }} packs{% endblocktranslate %}
-                                            </div>
-                                        {% endif %}
-                                        {% include "food/separator.html" %}
-                                        <div class="flex-1 text-center" title="{% translate "protein" %}">
-                                            {% blocktranslate with mass=record.protein|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
-                                        </div>
-                                        {% include "food/separator.html" %}
-                                        <div class="flex-1 text-center" title="{% translate "fat" %}">
-                                            {% blocktranslate with mass=record.fat|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
-                                        </div>
-                                        {% include "food/separator.html" %}
-                                        <div class="flex-1 text-center" title="{% translate "carbs" %}">
-                                            {% blocktranslate with mass=record.carbs|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
-                                        </div>
-                                        {% include "food/separator.html" %}
-                                        <div class="flex-1 text-center" title="{% translate "calories" %}">{{ record.calories|floatformat:2 }}</div>
-                                    </div>
-                                {% endfor %}
-                                <div class="flex flex-row items-center py-1">
-                                    <div class="w-2/6"></div>
-                                    <div class="flex-1 text-center"></div>
-                                    {% include "food/separator.html" %}
-                                    <div class="flex-1 font-semibold text-center"
-                                         title="{% translate "protein" %}">
-                                        {% blocktranslate with mass=meal.protein|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
-                                    </div>
-                                    {% include "food/separator.html" %}
-                                    <div class="flex-1 font-semibold text-center"
-                                         title="{% translate "fat" %}">
-                                        {% blocktranslate with mass=meal.fat|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
-                                    </div>
-                                    {% include "food/separator.html" %}
-                                    <div class="flex-1 font-semibold text-center"
-                                         title="{% translate "carbs" %}">
-                                        {% blocktranslate with mass=meal.carbs|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
-                                    </div>
-                                    {% include "food/separator.html" %}
-                                    <div class="flex-1 font-semibold text-center"
-                                         title="{% translate "calories" %}">{{ meal.calories|floatformat:2 }}</div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <div class="flex flex-row items-center py-1 border-2 rounded-b-xl px-4 border-green-300 {% if day.is_today %}!border-purple-300{% endif %}">
-                        <div class="w-2/6"></div>
-                        <div class="flex-1 text-center"></div>
-                        {% include "food/separator.html" %}
-                        <div class="flex-1 font-bold text-center"
-                             title="{% translate "protein" %}">
-                            {% blocktranslate with mass=day.protein|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
-                        </div>
-                        {% include "food/separator.html" %}
-                        <div class="flex-1 font-bold text-center" title="{% translate "fat" %}">
-                            {% blocktranslate with mass=day.fat|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
-                        </div>
-                        {% include "food/separator.html" %}
-                        <div class="flex-1 font-bold text-center" title="{% translate "carbs" %}">
-                            {% blocktranslate with mass=day.carbs|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
-                        </div>
-                        {% include "food/separator.html" %}
-                        <div class="flex-1 font-bold text-center"
-                             title="{% translate "calories" %}">{{ day.calories|floatformat:2 }}</div>
-                    </div>
-                </div>
-            {% endfor %}
+    <body hx-headers='{ "X-CSRFToken": "{{ csrf_token }}" }'>
+        <header class="fixed top-0 z-20 flex flex-row w-full shadow bg-white">
+            <button class="flex items-center justify-center border-r border-zinc-200 size-12">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke-width="1.5"
+                     stroke="currentColor"
+                     class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+            <div class="flex flex-row items-center justify-center flex-1" id="date">
+                {{ day.date|date:"SHORT_DATE_FORMAT" }} {{ day.date|date:"l" }}
+            </div>
+            <input class="border-0 border-l focus:outline-none focus:ring-0 focus:border-inherit size-12 border-zinc-200"
+                   type="date"
+                   name="date"
+                   hx-get="{% url "food:index" %}"
+                   hx-target="body"
+                   hx-push-url="true">
+        </header>
+        <main class="mt-12 mb-12 p-4 items-center">
+            <div id="meals" x-data x-sort>{% include "food/meals.html" %}</div>
+            <div class="flex justify-center">
+                <button class="p-2 rounded-xl border-2 border-lime-500 bg-lime-300 cursor-pointer"
+                        title="{% translate "Add new meal" %}"
+                        hx-post="{% url "food:store-meal" date=day.date %}"
+                        hx-target="#meals"
+                        hx-swap="beforeend">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke-width="2"
+                         stroke="currentColor"
+                         class="size-6 text-lime-600">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                </button>
+            </div>
         </main>
+        <footer class="fixed bottom-0 block w-full h-12 border-t border-zinc-200">
+        </footer>
+        {% include "food/record_modal.html" %}
     </body>
 </html>

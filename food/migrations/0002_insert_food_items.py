@@ -1,12 +1,12 @@
 import csv
 
 from django.db import migrations
-from django.contrib.auth.models import User
+from django.conf import settings
 
-from .. import models
+def insert_food_items(apps, schema_editor):
+    Item = apps.get_model('food', 'Item')
+    User = apps.get_model(settings.AUTH_USER_MODEL)
 
-
-def load_food_items(apps, schema_editor):
     with open("food/csv/food.csv", encoding="utf-8") as file:
         reader = csv.reader(file)
         user = User.objects.filter(username="nikita").get_or_create()[0]
@@ -16,7 +16,7 @@ def load_food_items(apps, schema_editor):
                 if row[5]
                 else None
             )
-            item = models.Item(
+            item = Item(
                 user=user,
                 name=row[0],
                 protein=float(row[1].replace(",", ".").replace('"', "")),
@@ -29,6 +29,11 @@ def load_food_items(apps, schema_editor):
             item.full_clean()
             item.save()
 
+def delete_food_items(apps, schema_editor):
+    Item = apps.get_model('food', 'Item')
+
+    Item.objects.all().delete()
+
 
 class Migration(migrations.Migration):
 
@@ -36,4 +41,4 @@ class Migration(migrations.Migration):
         ("food", "0001_initial"),
     ]
 
-    operations = [migrations.RunPython(load_food_items)]
+    operations = [migrations.RunPython(insert_food_items, delete_food_items)]

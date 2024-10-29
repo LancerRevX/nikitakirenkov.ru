@@ -3,5 +3,6 @@ django-nested-admin
 django-extensions
 django-browser-reload
 django-tailwind
+django-htmx
 python-dotenv
 psycopg2

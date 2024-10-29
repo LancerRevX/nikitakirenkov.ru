@@ -1,0 +1,68 @@
+{% load i18n %}
+<div class="min-h-10 rounded-xl border-2 mb-4 {{ border_class }} overflow-hidden"
+     x-sort:item="{{ meal.position }}">
+    <div class="h-6 flex flex-row {{ bg_class }}">
+        <div class="w-8 flex justify-center" x-sort:handle>
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke-width="1.5"
+                 stroke="currentColor"
+                 class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+            </svg>
+        </div>
+        <div class="flex-1"></div>
+        <div class="w-8 flex justify-center items-center">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke-width="1.5"
+                 stroke="currentColor"
+                 class="size-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </div>
+    </div>
+    <div class="p-4 ">
+        {% for record in meal.records.all %}
+            {% include "food/record.html" %}
+        {% endfor %}
+        <button class="py-1 w-full flex justify-center rounded-lg border-2 border-lime-500 bg-lime-300 cursor-pointer"
+                title="{% translate "Add new record" %}"
+                hx-post="{% url "food:store-meal" date=day.date %}"
+                hx-target="#meals"
+                hx-swap="beforeend">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke-width="2"
+                 stroke="currentColor"
+                 class="size-4 text-lime-600">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+        </button>
+    </div>
+    <div class="flex flex-row items-center py-1 {{ bg_class }}">
+        <div class="w-2/6"></div>
+        <div class="flex-1 text-center"></div>
+        {% include "food/separator.html" %}
+        <div class="flex-1 font-semibold text-center"
+             title="{% translate "protein" %}">
+            {% blocktranslate with mass=meal.protein|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
+        </div>
+        {% include "food/separator.html" %}
+        <div class="flex-1 font-semibold text-center"
+             title="{% translate "fat" %}">
+            {% blocktranslate with mass=meal.fat|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
+        </div>
+        {% include "food/separator.html" %}
+        <div class="flex-1 font-semibold text-center"
+             title="{% translate "carbs" %}">
+            {% blocktranslate with mass=meal.carbs|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
+        </div>
+        {% include "food/separator.html" %}
+        <div class="flex-1 font-semibold text-center"
+             title="{% translate "calories" %}">{{ meal.calories|floatformat:2 }}</div>
+    </div>
+</div>

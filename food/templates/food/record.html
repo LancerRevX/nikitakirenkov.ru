@@ -1,0 +1,33 @@
+{% load i18n %}
+<div class="flex flex-row items-center border-b-2 py-1 last:border-none">
+    <div class="w-2/6 pl-2 overflow-hidden text-nowrap"
+         title="{{ record.item }}">{{ record.item|capfirst }}</div>
+    {% include "food/separator.html" %}
+    {% if record.type == record.Type.MASS %}
+        <div class="flex-1 text-center" title="{% translate "mass" %}">
+            {% blocktranslate with mass=record.value|floatformat %}{{ mass }}g{% endblocktranslate %}
+        </div>
+    {% elif record.type == record.Type.PIECE %}
+        <div class="flex-1 text-center" title="{% translate "pieces" %}">
+            {% blocktranslate with pieces=record.value|floatformat:-2 %}{{ pieces }} pieces{% endblocktranslate %}
+        </div>
+    {% elif record.type == record.Type.PACK %}
+        <div class="flex-1 text-center" title="{% translate "packs" %}">
+            {% blocktranslate with packs=record.value %}{{ packs }} packs{% endblocktranslate %}
+        </div>
+    {% endif %}
+    {% include "food/separator.html" %}
+    <div class="flex-1 text-center" title="{% translate "protein" %}">
+        {% blocktranslate with mass=record.protein|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
+    </div>
+    {% include "food/separator.html" %}
+    <div class="flex-1 text-center" title="{% translate "fat" %}">
+        {% blocktranslate with mass=record.fat|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
+    </div>
+    {% include "food/separator.html" %}
+    <div class="flex-1 text-center" title="{% translate "carbs" %}">
+        {% blocktranslate with mass=record.carbs|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
+    </div>
+    {% include "food/separator.html" %}
+    <div class="flex-1 text-center" title="{% translate "calories" %}">{{ record.calories|floatformat:2 }}</div>
+</div>

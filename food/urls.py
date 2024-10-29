@@ -1,5 +1,22 @@
-from django.urls import path, include
+import datetime
+
+from django.urls import path, include, register_converter
 
 from . import views
 
-urlpatterns = [path("", views.index)]
+app_name = "food"
+
+
+class DateConverter:
+    regex = r"\d\d\d\d-\d\d-\d\d"
+
+    def to_python(self, value):
+        return datetime.date.fromisoformat(value)
+
+    def to_url(self, value):
+        return value.isoformat()
+
+
+register_converter(DateConverter, "date")
+
+urlpatterns = [path("", views.index, name="index"), path('days/<date:date>/meals/', views.store_meal, name="store-meal")]

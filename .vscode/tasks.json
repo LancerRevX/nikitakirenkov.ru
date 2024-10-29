@@ -6,7 +6,7 @@
         {
             "label": "django runserver",
             "type": "shell",
-            "command": "python manage.py runserver",
+            "command": "python manage.py runserver 0.0.0.0:8000",
         },
         {
             "label": "django tailwind start",
