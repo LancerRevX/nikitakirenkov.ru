@@ -124,7 +124,7 @@ class ItemType(models.Model):
 
 class Item(models.Model):
     user = models.ForeignKey(
-        FoodUser, models.CASCADE, related_name="items", verbose_name=_("user")
+        FoodUser, models.CASCADE, related_name="food_items", verbose_name=_("user")
     )
     type = models.ForeignKey(
         ItemType,

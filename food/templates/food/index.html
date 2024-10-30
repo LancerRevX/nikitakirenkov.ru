@@ -20,7 +20,7 @@
                 crossorigin="anonymous"></script>
         {% tailwind_css %}
     </head>
-    <body hx-headers='{ "X-CSRFToken": "{{ csrf_token }}" }'>
+    <body hx-headers='{ "X-CSRFToken": "{{ csrf_token }}" }' x-data="{ isRecordModalShown: false }">
         <header class="fixed top-0 z-20 flex flex-row w-full shadow bg-white">
             <button class="flex items-center justify-center border-r border-zinc-200 size-12">
                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -42,8 +42,8 @@
                    hx-target="body"
                    hx-push-url="true">
         </header>
-        <main class="mt-12 mb-12 p-4 items-center">
-            <div id="meals" x-data x-sort>{% include "food/meals.html" %}</div>
+        <main class="mt-12 mb-12 p-4">
+            {% include "food/meals.html" %}
             <div class="flex justify-center">
                 <button class="p-2 rounded-xl border-2 border-lime-500 bg-lime-300 cursor-pointer"
                         title="{% translate "Add new meal" %}"
@@ -63,6 +63,6 @@
         </main>
         <footer class="fixed bottom-0 block w-full h-12 border-t border-zinc-200">
         </footer>
-        {% include "food/record_modal.html" %}
+        {% include "food/record_modal.html" with form=record_form %}
     </body>
 </html>
