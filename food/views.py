@@ -27,6 +27,9 @@ def index(request: HttpRequest):
     else:
         day = {"date": date}
 
+    if request.htmx:
+        return render(request, 'food/htmx/index.html', {'day': day})
+
     record_form = RecordForm(user=request.user)
 
     return render(

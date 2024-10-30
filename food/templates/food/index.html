@@ -20,7 +20,8 @@
                 crossorigin="anonymous"></script>
         {% tailwind_css %}
     </head>
-    <body hx-headers='{ "X-CSRFToken": "{{ csrf_token }}" }' x-data="{ isRecordModalShown: false }">
+    <body hx-headers='{ "X-CSRFToken": "{{ csrf_token }}" }'
+          x-data="{ isRecordModalShown: false }">
         <header class="fixed top-0 z-20 flex flex-row w-full shadow bg-white">
             <button class="flex items-center justify-center border-r border-zinc-200 size-12">
                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -32,14 +33,12 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                 </svg>
             </button>
-            <div class="flex flex-row items-center justify-center flex-1" id="date">
-                {{ day.date|date:"SHORT_DATE_FORMAT" }} {{ day.date|date:"l" }}
-            </div>
+            {% include "food/date.html" %}
             <input class="border-0 border-l focus:outline-none focus:ring-0 focus:border-inherit size-12 border-zinc-200"
                    type="date"
                    name="date"
                    hx-get="{% url "food:index" %}"
-                   hx-target="body"
+                   hx-swap="none"
                    hx-push-url="true">
         </header>
         <main class="mt-12 mb-12 p-4">

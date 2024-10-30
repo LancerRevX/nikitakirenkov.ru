@@ -1,4 +1,4 @@
-<div id="meals" x-data x-sort hx-swap-oob="#meals">
+<div id="meals" x-data x-sort hx-swap-oob="true">
     {% for meal in day.meals.all %}
         {% include "food/meal.html" %}
     {% endfor %}
