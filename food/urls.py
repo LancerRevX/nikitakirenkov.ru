@@ -20,8 +20,9 @@ class DateConverter:
 register_converter(DateConverter, "date")
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("days/<date:date>/meals/", views.store_meal, name="store-meal"),
-    path('days/<date:date>/meals/<int:position>/', views.destroy_meal, name='destroy-meal'),
-    path('days/<date:date>/meals/<int:meal_position>/', views.create_record, name='create-record'),
+    path("days/", views.DayView.as_view(), name="days"),
+    path("days/<date:date>/", views.DayView.as_view(), name="days"),
+    path("days/<date:date>/meals/", views.MealView.as_view(), name="meals"),
+    path('days/<date:date>/meals/<int:meal_position>/', views.MealView.as_view(), name='meals'),
+    path('days/<date:date>/meals/<int:meal_position>/records/', views.create_record, name='create-record'),
 ]

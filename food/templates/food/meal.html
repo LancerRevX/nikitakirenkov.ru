@@ -14,7 +14,7 @@
         </div>
         <div class="flex-1"></div>
         <button class="w-8 flex justify-center items-center"
-                hx-delete="{% url "food:destroy-meal" date=day.date position=meal.position %}">
+                hx-delete="{% url "food:meals" date=day.date meal_position=meal.position %}">
             <svg xmlns="http://www.w3.org/2000/svg"
                  fill="none"
                  viewBox="0 0 24 24"

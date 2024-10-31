@@ -45,7 +45,7 @@ class Day(models.Model):
     )
 
     def __str__(self) -> str:
-        return str(self.date)
+        return str(self.date)    
 
     @property
     def protein(self):
