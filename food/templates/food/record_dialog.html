@@ -1,0 +1,19 @@
+{% load i18n %}
+<dialog class="z-20 h-screen w-screen top-0 pt-12 max-w-none max-h-screen"
+        {% comment %}
+        x-show="isRecordModalShown"
+        {% endcomment %}
+        x-ref="recordDialog">
+    <div class="flex flex-col h-full bg-white p-4 gap-4">
+        <form class="flex flex-col items-center"
+              id="item-search-form"
+              x-ref="itemSearchForm"
+              hx-get="{% url "food:items" %}"
+              hx-trigger="change,submit,reset"
+              hx-target="#items">
+            {% include item_search_form.template_name with form=item_search_form %}
+        </form>
+        <form id="record-form">
+        </form>
+    </div>
+</dialog>

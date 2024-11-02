@@ -6,8 +6,10 @@
         <meta name="description" content="">
         <meta name="keywords" content="">
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0" />
         <title>{% translate "food"|title %}</title>
+        <script defer src="{% static "food/record.js" %}"></script>
         <script defer
                 src="https://cdn.jsdelivr.net/npm/@alpinejs/sort@3.x.x/dist/cdn.min.js"></script>
         <script defer
@@ -22,7 +24,7 @@
     </head>
     <body hx-headers='{ "X-CSRFToken": "{{ csrf_token }}" }'
           x-data="{ isRecordModalShown: false }">
-        <header class="fixed top-0 z-20 flex flex-row w-full shadow bg-white">
+        <header class="fixed top-0 z-30 flex flex-row w-screen shadow bg-white">
             <button class="flex items-center justify-center border-r border-zinc-200 size-12">
                 <svg xmlns="http://www.w3.org/2000/svg"
                      fill="none"
@@ -37,7 +39,7 @@
             <input class="border-0 border-l focus:outline-none focus:ring-0 focus:border-inherit size-12 border-zinc-200"
                    type="date"
                    name="date"
-                   hx-get="{% url "food:index" %}"
+                   hx-get="{% url "food:days" %}"
                    hx-swap="none"
                    hx-push-url="true">
         </header>
@@ -60,8 +62,8 @@
                 </button>
             </div>
         </main>
-        <footer class="fixed bottom-0 block w-full h-12 border-t border-zinc-200">
+        <footer class="fixed z-10 bottom-0 block w-full h-12 border-t border-zinc-200">
         </footer>
-        {% include "food/record_modal.html" with form=record_form %}
+        {% include "food/record_dialog.html" %}
     </body>
 </html>

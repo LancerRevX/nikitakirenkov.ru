@@ -1,8 +1,11 @@
 {% load i18n %}
-<div class="min-h-10 rounded-xl border-2 mb-4 overflow-hidden [&.sortable-drag]:!bg-zinc-200 [&.sortable-drag]:!border-zinc-200 [&:nth-child(1n)]:bg-green-300 [&:nth-child(2n)]:bg-red-300 [&:nth-child(3n)]:bg-blue-300 [&:nth-child(1n)]:border-green-300 [&:nth-child(2n)]:border-red-300 [&:nth-child(3n)]:border-blue-300"
-     x-sort:item="{{ meal.position }}">
-    <div class="h-6 flex flex-row bg-inherit">
-        <div class="w-8 flex justify-center" x-sort:handle>
+<article id="meal_{{ meal.position }}"
+         class="min-h-10 rounded-xl border-2 mb-4 overflow-hidden [&.sortable-drag]:!bg-zinc-200 [&.sortable-drag]:!border-zinc-200 [&:nth-child(1n)]:bg-green-300 [&:nth-child(2n)]:bg-red-300 [&:nth-child(3n)]:bg-blue-300 [&:nth-child(1n)]:border-green-300 [&:nth-child(2n)]:border-red-300 [&:nth-child(3n)]:border-blue-300"
+         x-sort:item="{{ meal.position }}"
+         hx-swap-oob="#meal_{{ meal.position }}">
+    <header class="h-6 flex flex-row bg-inherit">
+        <div class="w-8 flex justify-center"
+             x-sort:handle>
             <svg xmlns="http://www.w3.org/2000/svg"
                  fill="none"
                  viewBox="0 0 24 24"
@@ -14,7 +17,8 @@
         </div>
         <div class="flex-1"></div>
         <button class="w-8 flex justify-center items-center"
-                hx-delete="{% url "food:meals" date=day.date meal_position=meal.position %}">
+                hx-delete="{% url "food:meals" date=day.date meal_position=meal.position %}"
+                hx-confirm="{% translate "Are you sure?" %}">
             <svg xmlns="http://www.w3.org/2000/svg"
                  fill="none"
                  viewBox="0 0 24 24"
@@ -24,9 +28,9 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
         </button>
-    </div>
+    </header>
     <div class="p-4 bg-white">
-        <div id="records">
+        <div id="records" x-data x-sort>
             {% for record in meal.records.all %}
                 {% include "food/record.html" %}
             {% endfor %}
@@ -35,7 +39,8 @@
                 title="{% translate "Add new record" %}"
                 hx-get="{% url "food:create-record" date=day.date meal_position=meal.position %}"
                 hx-target="#record-form"
-                hx-swap="beforeend">
+                hx-swap="outerHTML"
+                @click="$refs.recordDialog.show(); $refs.itemSearchForm.reset()">
             <svg xmlns="http://www.w3.org/2000/svg"
                  fill="none"
                  viewBox="0 0 24 24"
@@ -46,26 +51,22 @@
             </svg>
         </button>
     </div>
-    <div class="flex flex-row items-center py-1 bg-inherit">
-        <div class="w-2/6"></div>
-        <div class="flex-1 text-center"></div>
-        {% include "food/separator.html" %}
+    <footer class="flex flex-row items-center py-1 px-4 bg-inherit">
         <div class="flex-1 font-semibold text-center"
              title="{% translate "protein" %}">
             {% blocktranslate with mass=meal.protein|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
         </div>
-        {% include "food/separator.html" %}
         <div class="flex-1 font-semibold text-center"
              title="{% translate "fat" %}">
             {% blocktranslate with mass=meal.fat|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
         </div>
-        {% include "food/separator.html" %}
         <div class="flex-1 font-semibold text-center"
              title="{% translate "carbs" %}">
             {% blocktranslate with mass=meal.carbs|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
         </div>
-        {% include "food/separator.html" %}
         <div class="flex-1 font-semibold text-center"
-             title="{% translate "calories" %}">{{ meal.calories|floatformat:2 }}</div>
-    </div>
-</div>
+             title="{% translate "calories" %}">
+            {{ meal.calories|floatformat:2 }}
+        </div>
+    </footer>
+</article>

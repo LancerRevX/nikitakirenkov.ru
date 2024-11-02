@@ -23,6 +23,25 @@ urlpatterns = [
     path("days/", views.DayView.as_view(), name="days"),
     path("days/<date:date>/", views.DayView.as_view(), name="days"),
     path("days/<date:date>/meals/", views.MealView.as_view(), name="meals"),
-    path('days/<date:date>/meals/<int:meal_position>/', views.MealView.as_view(), name='meals'),
-    path('days/<date:date>/meals/<int:meal_position>/records/', views.create_record, name='create-record'),
+    path(
+        "days/<date:date>/meals/<int:meal_position>/",
+        views.MealView.as_view(),
+        name="meals",
+    ),
+    path(
+        "days/<date:date>/meals/<int:meal_position>/records/",
+        views.RecordView.as_view(),
+        name="records",
+    ),
+    path(
+        "days/<date:date>/meals/<int:meal_position>/records/<int:record_position>/",
+        views.RecordView.as_view(),
+        name="records",
+    ),
+    path(
+        "days/<date:date>/meals/<int:meal_position>/records/create",
+        views.create_record,
+        name="create-record",
+    ),
+    path("items/", views.ItemView.as_view(), name="items"),
 ]

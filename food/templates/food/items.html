@@ -1,0 +1,10 @@
+{% for item in items %}
+    <label for="item_{{ item.id }}"
+           class="block">
+        {{ item.name }}
+        <input id="item_{{ item.id }}"
+               type="radio"
+               name="item"
+               value="{{ item.id }}" />
+    </label>
+{% endfor %}

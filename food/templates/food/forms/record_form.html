@@ -1,29 +1,44 @@
 {% load i18n %}
-<div id="items" class="flex-1"></div>
-<div class="flex flex-row gap-4 justify-center">
-    <div class="flex flex-row">
-        {% for value, label in form.type.field.choices %}
-            <label for="{{ form.type.id_for_label }}_{{ value }}"
-                   class="has-[:checked]:bg-zinc-200 has-[:checked]:text-inherit border-y border-r border-zinc-400 first:rounded-l-xl first:border-l last:rounded-e-xl py-1 px-2">
-                {{ label }}
-                <input type="radio"
-                       name="{{ form.type.html_name }}"
-                       id="{{ form.type.id_for_label }}_{{ value }}"
-                       value="{{ value }}"
-                       class="hidden"
-                       {% if value == form.type.initial %}checked{% endif %}
-                       x-model.fill="type">
-            </label>
-        {% endfor %}
+<form id="record-form"
+      class="flex-1 min-h-0 flex flex-col gap-4"
+      x-data="{ type: null } "
+      {% if not form.is_bound %} hx-post="{% url "food:records" date=day.date meal_position=meal.position %}" {% endif %}>
+    <div class="flex-1 min-h-0 overflow-y-scroll"
+         id="items"></div>
+    <div class="flex flex-row gap-4 justify-center">
+        <div class="flex flex-row">
+            {% for value, label in form.type.field.choices %}
+                <label for="{{ form.type.id_for_label }}_{{ value }}"
+                       class="has-[:checked]:bg-zinc-200 has-[:checked]:text-inherit border-y border-r border-zinc-400 first:rounded-l-xl first:border-l last:rounded-e-xl py-1 px-2">
+                    {{ label }}
+                    <input type="radio"
+                           name="{{ form.type.html_name }}"
+                           id="{{ form.type.id_for_label }}_{{ value }}"
+                           value="{{ value }}"
+                           class="hidden"
+                           {% if value == form.type.initial %}checked{% endif %}
+                           x-model.fill="type">
+                </label>
+            {% endfor %}
+        </div>
+        <div class="flex flex-row gap-2">
+            <input type="number"
+                   name="value"
+                   class="w-16 h-8 pr-1"
+                   required>
+            <div x-show="type == 'mass'">{% translate "g" %}</div>
+            <div>{% translate "pieces" %}</div>
+            <div>{% translate "packs" %}</div>
+        </div>
     </div>
-    <div class="flex flex-row gap-2">
-        <input type="number" name="value" class="w-16 h-8 pr-1">
-        <div x-show="type == 'mass'">{% translate "g" %}</div>
-        <div>{% translate "pieces" %}</div>
-        <div>{% translate "packs" %}</div>
+    <div class="flex flex-row justify-evenly">
+        <button type="submit"
+                class="p-2 border border-zinc-400 rounded-xl w-24">
+            {% translate "OK" %}
+        </button>
+        <button type="close"
+                class="p-2 border border-zinc-400 rounded-xl w-24"
+                formnovalidate
+                formmethod="dialog">{% translate "Cancel" %}</button>
     </div>
-</div>
-<div class="flex flex-row justify-evenly">
-    <button class="p-2 border border-zinc-400 rounded-xl w-24">{% translate "OK" %}</button>
-    <button class="p-2 border border-zinc-400 rounded-xl w-24">{% translate "Cancel" %}</button>
-</div>
+</form>

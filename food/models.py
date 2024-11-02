@@ -43,9 +43,10 @@ class Day(models.Model):
         verbose_name=_("diet"),
         related_name="days",
     )
+    meals: models.Manager["Meal"]
 
     def __str__(self) -> str:
-        return str(self.date)    
+        return str(self.date)
 
     @property
     def protein(self):
@@ -95,7 +96,10 @@ class Comment(models.Model):
 
 class Group(models.Model):
     user = models.ForeignKey(
-        FoodUser, models.CASCADE, related_name="food_groups", verbose_name=_("user")
+        FoodUser,
+        models.CASCADE,
+        related_name="food_groups",
+        verbose_name=_("user"),
     )
     name = models.CharField(_("name"), max_length=32)
     color = models.CharField(_("color"), max_length=7)
@@ -113,7 +117,10 @@ class Group(models.Model):
 
 class ItemType(models.Model):
     user = models.ForeignKey(
-        FoodUser, models.CASCADE, related_name="item_types", verbose_name=_("user")
+        FoodUser,
+        models.CASCADE,
+        related_name="item_types",
+        verbose_name=_("user"),
     )
     name = models.CharField(_("name"), max_length=32)
     color = models.CharField(_("color"), max_length=7)
@@ -124,7 +131,10 @@ class ItemType(models.Model):
 
 class Item(models.Model):
     user = models.ForeignKey(
-        FoodUser, models.CASCADE, related_name="food_items", verbose_name=_("user")
+        FoodUser,
+        models.CASCADE,
+        related_name="food_items",
+        verbose_name=_("user"),
     )
     type = models.ForeignKey(
         ItemType,
@@ -134,6 +144,7 @@ class Item(models.Model):
         verbose_name=_("type"),
         related_name="items",
     )
+    groups: models.Manager[Group]
     name = models.CharField(_("name"), max_length=256)
     # groups = models.ManyToManyField(
     #     Group, related_name="items", verbose_name=_("groups")
@@ -150,7 +161,9 @@ class Item(models.Model):
         if self.type is not None:
             result = f"{self.type} {result}"
         if self.groups.count() > 0:
-            result += f" [{', '.join(self.groups.values_list('name', flat=True))}]"
+            result += (
+                f" [{', '.join(self.groups.values_list('name', flat=True))}]"
+            )
         return result
 
     class Meta:
@@ -164,6 +177,7 @@ class Meal(models.Model):
         Day, models.CASCADE, verbose_name=_("day"), related_name="meals"
     )
     position = models.IntegerField(default=0)
+    records: models.Manager["Record"]
 
     def __str__(self):
         return f"{self.day} - meal #{self.position}"
@@ -187,7 +201,7 @@ class Meal(models.Model):
     class Meta:
         verbose_name = _("meal")
         verbose_name_plural = _("meals")
-        ordering = ['position']
+        ordering = ["position"]
 
 
 class Record(models.Model):
@@ -202,8 +216,11 @@ class Record(models.Model):
     item = models.ForeignKey(
         Item, models.PROTECT, verbose_name=_("item"), related_name="records"
     )
-    type = models.CharField(_("type"), max_length=5, choices=Type, default=Type.MASS)
+    type = models.CharField(
+        _("type"), max_length=5, choices=Type, default=Type.MASS
+    )
     value = models.FloatField(_("value"))
+    position = models.PositiveBigIntegerField(_("position"), default=0)
 
     def __str__(self):
         if self.type == self.Type.MASS:
@@ -216,7 +233,9 @@ class Record(models.Model):
             )
         else:
             return (
-                str(self.item) + " " + ngettext_lazy("%f pack", "%f packs", self.value)
+                str(self.item)
+                + " "
+                + ngettext_lazy("%f pack", "%f packs", self.value)
             )
 
     @property

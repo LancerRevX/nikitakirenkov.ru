@@ -3,8 +3,30 @@ import csv
 from django.db import migrations
 from django.conf import settings
 
+GROUPS = [
+    dict(name="Bellini", color="#ffffff"),
+    dict(name="Перцы", color="#ff0000"),
+    dict(name="Cheez", color="#fff200"),
+    dict(name="Фрукты", color="#ff8c00"),
+]
+
+
+def insert_food_groups(apps, schema_editor):
+    Group = apps.get_model("food", "Group")
+    User = apps.get_model(settings.AUTH_USER_MODEL)
+
+    user = User.objects.filter(username="nikita").get_or_create()[0]
+    for group_data in GROUPS:
+        user.food_groups.create(**group_data)
+
+
+def delete_food_groups(apps, schema_editor):
+    Group = apps.get_model("food", "Group")
+    Group.objects.all().delete()
+
+
 def insert_food_items(apps, schema_editor):
-    Item = apps.get_model('food', 'Item')
+    Item = apps.get_model("food", "Item")
     User = apps.get_model(settings.AUTH_USER_MODEL)
 
     with open("food/csv/food.csv", encoding="utf-8") as file:
@@ -29,8 +51,9 @@ def insert_food_items(apps, schema_editor):
             item.full_clean()
             item.save()
 
+
 def delete_food_items(apps, schema_editor):
-    Item = apps.get_model('food', 'Item')
+    Item = apps.get_model("food", "Item")
 
     Item.objects.all().delete()
 
@@ -41,4 +64,7 @@ class Migration(migrations.Migration):
         ("food", "0001_initial"),
     ]
 
-    operations = [migrations.RunPython(insert_food_items, delete_food_items)]
+    operations = [
+        migrations.RunPython(insert_food_items, delete_food_items),
+        migrations.RunPython(insert_food_groups, delete_food_groups),
+    ]

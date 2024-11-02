@@ -1,0 +1,15 @@
+<div class="overflow-x-scroll pb-2 mb-2">
+    <div class="flex flex-row gap-2">
+        {% for group in form.fields.group.queryset %}
+            <div class="p-2 text-nowrap border border-zinc-400 rounded-lg">
+                {{ group.name }}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<input class="w-full"
+       type="search"
+       name="query"
+       id=""
+       value="{{ form.query.value }}"
+       autofocus>
