@@ -1,0 +1,29 @@
+{% load i18n %}
+{% with class="w-20 flex flex-row justify-center items-center relative last:after:hidden after:block after:absolute after:w-[2px] after:bg-slate-300 after:h-[0.85rem] after:right-0" %}
+    <div id="item-preview"
+         class="flex flex-row justify-center gap-4"
+         hx-swap-oob="true">
+        <div class="{{ class }}"
+             title="{% translate "protein" %}">
+            {% blocktranslate with mass=record.protein|default:"0"|floatformat:2 trimmed %}
+                {{ mass }}g
+            {% endblocktranslate %}
+        </div>
+        <div class="{{ class }}"
+             title="{% translate "fat" %}">
+            {% blocktranslate with mass=record.fat|default:"0"|floatformat:2 trimmed %}
+                {{ mass }}g
+            {% endblocktranslate %}
+        </div>
+        <div class="{{ class }}"
+             title="{% translate "carbs" %}">
+            {% blocktranslate with mass=record.carbs|default:"0"|floatformat:2 trimmed %}
+                {{ mass }}g
+            {% endblocktranslate %}
+        </div>
+        <div class="{{ class }}"
+             title="{% translate "calories" %}">
+            {{ record.calories|default:"0"|floatformat:2 }}
+        </div>
+    </div>
+{% endwith %}

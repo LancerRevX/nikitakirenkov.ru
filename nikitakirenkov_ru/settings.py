@@ -26,7 +26,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-t@^iuc40=bc_b0)zh@^ld5(v$4kr6_6r+ganat=+)oh9-mzxc1"
+SECRET_KEY = (
+    "django-insecure-t@^iuc40=bc_b0)zh@^ld5(v$4kr6_6r+ganat=+)oh9-mzxc1"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(environ["DEBUG"])
@@ -82,7 +84,7 @@ ROOT_URLCONF = "nikitakirenkov_ru.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": ["templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -96,6 +98,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "nikitakirenkov_ru.wsgi.application"
+
+LOGIN_URL = "/auth/login/"
 
 
 # Database
@@ -134,7 +138,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "ru-RU"
+LANGUAGE_CODE = "ru"
 
 LANGUAGES = [
     ("ru", _("Russian")),

@@ -1,4 +1,5 @@
 import csv
+from random import choice
 
 from django.db import migrations
 from django.conf import settings
@@ -11,27 +12,18 @@ GROUPS = [
 ]
 
 
-def insert_food_groups(apps, schema_editor):
+def insert_food_items(apps, schema_editor):
+    Item = apps.get_model("food", "Item")
     Group = apps.get_model("food", "Group")
     User = apps.get_model(settings.AUTH_USER_MODEL)
 
     user = User.objects.filter(username="nikita").get_or_create()[0]
+
     for group_data in GROUPS:
         user.food_groups.create(**group_data)
 
-
-def delete_food_groups(apps, schema_editor):
-    Group = apps.get_model("food", "Group")
-    Group.objects.all().delete()
-
-
-def insert_food_items(apps, schema_editor):
-    Item = apps.get_model("food", "Item")
-    User = apps.get_model(settings.AUTH_USER_MODEL)
-
     with open("food/csv/food.csv", encoding="utf-8") as file:
         reader = csv.reader(file)
-        user = User.objects.filter(username="nikita").get_or_create()[0]
         for row in reader:
             piece_mass = (
                 float(row[5].replace(",", ".").replace('"', ""))
@@ -46,16 +38,20 @@ def insert_food_items(apps, schema_editor):
                 carbs=float(row[3].replace(",", ".").replace('"', "")),
                 calories=float(row[4].replace(",", ".").replace('"', "")),
                 piece_mass=piece_mass,
-                pack_mass=piece_mass,
+                pack_mass=None,
             )
             item.full_clean()
             item.save()
 
 
 def delete_food_items(apps, schema_editor):
+    Day = apps.get_model("food", "Day")
     Item = apps.get_model("food", "Item")
+    Group = apps.get_model("food", "Group")
 
+    Day.objects.all().delete()
     Item.objects.all().delete()
+    Group.objects.all().delete()
 
 
 class Migration(migrations.Migration):
@@ -66,5 +62,4 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(insert_food_items, delete_food_items),
-        migrations.RunPython(insert_food_groups, delete_food_groups),
     ]

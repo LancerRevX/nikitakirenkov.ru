@@ -1,0 +1,13 @@
+<form hx-get="{% url "food:preview-record" %}"
+      hx-swap="none"
+      x-init="$watch('fields', () => $dispatch('submit'))">
+       <input type="hidden"
+              name="item"
+              x-model="fields.itemId">
+       <input type="hidden"
+              name="type"
+              x-model="fields.type">
+       <input type="hidden"
+              name="value"
+              x-model="fields.value">
+</form>

@@ -1,15 +1,34 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Max, Min
+from django.core.exceptions import ValidationError
 
-from .models import Group, Item, Record
+from .models import Group, Item, Record, Meal
 
 
 class DayForm(forms.Form):
     date = forms.DateField(
         input_formats=["%Y-%m-%d"], required=True, label=_("date")
     )
+
+
+class MealForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["position"] = forms.IntegerField(
+            max_value=self.instance.day.meals.aggregate(
+                position=Max("position")
+            )["position"],
+            min_value=self.instance.day.meals.aggregate(
+                position=Min("position")
+            )["position"],
+            required=True,
+        )
+
+    class Meta:
+        model = Meal
+        fields = ["position"]
 
 
 class ItemSearchForm(forms.Form):
@@ -39,6 +58,13 @@ class ItemSearchForm(forms.Form):
 
 class RecordForm(forms.ModelForm):
     template_name = "food/forms/record_form.html"
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+        self.fields["item"] = forms.ModelChoiceField(
+            self.user.food_items.all(), required=True
+        )
 
     class Meta:
         model = Record

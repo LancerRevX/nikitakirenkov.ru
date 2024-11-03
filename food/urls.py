@@ -1,6 +1,7 @@
 import datetime
 
 from django.urls import path, include, register_converter
+from django.views.generic import RedirectView
 
 from . import views
 
@@ -20,6 +21,12 @@ class DateConverter:
 register_converter(DateConverter, "date")
 
 urlpatterns = [
+    path("", RedirectView.as_view(url="days/")),
+    path(
+        "days/<date:date>/meals/<int:meal_position>/update/",
+        views.update_meal,
+        name="update-meal",
+    ),
     path("days/", views.DayView.as_view(), name="days"),
     path("days/<date:date>/", views.DayView.as_view(), name="days"),
     path("days/<date:date>/meals/", views.MealView.as_view(), name="meals"),
@@ -43,5 +50,11 @@ urlpatterns = [
         views.create_record,
         name="create-record",
     ),
+    path(
+        "days/<date:date>/meals/<int:meal_position>/records/<int:record_position>/destroy",
+        views.destroy_record,
+        name="destroy-record",
+    ),
+    path("preview-record", views.preview_record, name="preview-record"),
     path("items/", views.ItemView.as_view(), name="items"),
 ]

@@ -1,0 +1,27 @@
+{% load i18n %}
+<footer class="fixed z-10 bottom-0 w-full h-12 border-t border-zinc-200 px-8 flex flex-row items-center"
+        id="day-summary"
+        hx-swap-oob="true">
+    <div class="flex-1 font-semibold text-xl text-center"
+         title="{% translate "protein" %}">
+        {% blocktranslate with mass=day.protein|default:"0"|floatformat:2 trimmed %}
+            {{ mass }}g
+        {% endblocktranslate %}
+    </div>
+    <div class="flex-1 font-semibold text-xl text-center"
+         title="{% translate "fat" %}">
+        {% blocktranslate with mass=day.fat|default:"0"|floatformat:2 trimmed %}
+            {{ mass }}g
+        {% endblocktranslate %}
+    </div>
+    <div class="flex-1 font-semibold text-xl text-center"
+         title="{% translate "carbs" %}">
+        {% blocktranslate with mass=day.carbs|default:"0"|floatformat:2 trimmed %}
+            {{ mass }}g
+        {% endblocktranslate %}
+    </div>
+    <div class="flex-1 font-semibold text-xl text-center"
+         title="{% translate "calories" %}">
+        {{ day.calories|default:"0"|floatformat:2 }}
+    </div>
+</footer>

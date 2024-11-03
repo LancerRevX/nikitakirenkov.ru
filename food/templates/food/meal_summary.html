@@ -1,0 +1,21 @@
+{% load i18n %}
+<footer class="flex flex-row items-center py-1 px-4 bg-inherit"
+        id="meal_{{ meal.position }}_summary"
+        hx-swap-oob="true">
+    <div class="flex-1 font-semibold text-center"
+         title="{% translate "protein" %}">
+        {% blocktranslate with mass=meal.protein|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
+    </div>
+    <div class="flex-1 font-semibold text-center"
+         title="{% translate "fat" %}">
+        {% blocktranslate with mass=meal.fat|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
+    </div>
+    <div class="flex-1 font-semibold text-center"
+         title="{% translate "carbs" %}">
+        {% blocktranslate with mass=meal.carbs|floatformat:2 %}{{ mass }}g{% endblocktranslate %}
+    </div>
+    <div class="flex-1 font-semibold text-center"
+         title="{% translate "calories" %}">
+        {{ meal.calories|floatformat:2 }}
+    </div>
+</footer>

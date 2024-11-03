@@ -1,15 +1,48 @@
-<div class="overflow-x-scroll pb-2 mb-2">
-    <div class="flex flex-row gap-2">
-        {% for group in form.fields.group.queryset %}
-            <div class="p-2 text-nowrap border border-zinc-400 rounded-lg">
-                {{ group.name }}
-            </div>
-        {% endfor %}
+{% load i18n %}
+<form class="flex-1 flex flex-col items-center min-h-0"
+      id="item-search-form"
+      x-ref="itemSearchForm"
+      hx-get="{% url "food:items" %}"
+      hx-trigger="input from:#item-search-input delay:200ms,submit,change,htmx:oobAfterSwap from:window target:#record-form"
+      hx-target="#items"
+      hx-swap-oob="true">
+
+    <div class="overflow-x-scroll pb-2">
+        <div class="flex flex-row gap-2">
+            {% for group in form.fields.group.queryset %}
+                <div class="p-2 text-nowrap border border-zinc-400 rounded-lg">
+                    {{ group.name }}
+                </div>
+            {% endfor %}
+        </div>
     </div>
-</div>
-<input class="w-full"
-       type="search"
-       name="query"
-       id=""
-       value="{{ form.query.value }}"
-       autofocus>
+
+    <input class="w-full mb-4"
+           type="search"
+           name="query"
+           id="item-search-input"
+           value="{{ form.query.value }}"
+           autofocus
+           tabindex="1"
+           placeholder="{% translate "Search" %}">
+
+    <div id="items"
+         class="flex flex-col min-h-0">
+        {% include "food/items.html" with items=form.fields.item.queryset %}
+    </div>
+
+    <div class="flex-1 min-h-0 overflow-y-scroll"
+         id="items"
+         hx-validate="true"></div>
+    <div class="flex-1 hidden [&.htmx-request]:block"
+         id="items-load-indicator">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 24 24"
+             aria-hidden="true"
+             class="size-7 fill-neutral-600 motion-safe:animate-spin dark:fill-neutral-300">
+            <path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25" />
+            <path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" />
+        </svg>
+    </div>
+
+</form>

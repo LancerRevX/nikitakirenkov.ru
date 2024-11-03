@@ -1,44 +1,68 @@
 {% load i18n %}
 <form id="record-form"
-      class="flex-1 min-h-0 flex flex-col gap-4"
-      x-data="{ type: null } "
-      {% if not form.is_bound %} hx-post="{% url "food:records" date=day.date meal_position=meal.position %}" {% endif %}>
-    <div class="flex-1 min-h-0 overflow-y-scroll"
-         id="items"></div>
-    <div class="flex flex-row gap-4 justify-center">
+      class="min-h-0 flex flex-col gap-4"
+      {% if not form.is_bound %} hx-post="{% url "food:records" date=day.date meal_position=meal.position %}" {% endif %}
+      hx-swap="none"
+      hx-swap-oob="true"
+      hx-include="#items"
+      x-data="{ type: '{{ form.type.value }}' }">
+    <h2 class="block text-center text-lg font-semibold">
+        {% translate "Add new record" %}
+    </h2>
+    <input type="search"
+           name="query"
+           class="rounded-lg"
+           hx-get="{% url "food:items" %}"
+           hx-target="#items"
+           hx-swap="innerHTML"
+           hx-trigger="input delay:200ms"
+           placeholder="{% translate "Search" %}"
+           tabindex="1"
+           autofocus
+           value="{{ form.query.value }}">
+    <div id="items"
+         class="min-h-0 overflow-y-scroll h-48"
+         hx-preserve>
+        {% include "food/items.html" with items=form.fields.item.queryset %}
+    </div>
+
+    <fieldset class="flex flex-col gap-4 items-center">
         <div class="flex flex-row">
             {% for value, label in form.type.field.choices %}
                 <label for="{{ form.type.id_for_label }}_{{ value }}"
-                       class="has-[:checked]:bg-zinc-200 has-[:checked]:text-inherit border-y border-r border-zinc-400 first:rounded-l-xl first:border-l last:rounded-e-xl py-1 px-2">
+                       class="cursor-pointer has-[:checked]:bg-green-500 has-[:checked]:text-white has-[:checked]:font-semibold has-[:disabled]:bg-gray-100 border-y-2 border-r-2 border-green-600 first:rounded-l-xl first:border-2 last:rounded-e-xl py-1 w-20 text-center">
                     {{ label }}
                     <input type="radio"
                            name="{{ form.type.html_name }}"
                            id="{{ form.type.id_for_label }}_{{ value }}"
                            value="{{ value }}"
-                           class="hidden"
-                           {% if value == form.type.initial %}checked{% endif %}
-                           x-model.fill="type">
+                           required
+                           x-model="type">
                 </label>
             {% endfor %}
         </div>
-        <div class="flex flex-row gap-2">
+        <div class="grid grid-cols-3 w-full gap-2">
             <input type="number"
                    name="value"
-                   class="w-16 h-8 pr-1"
-                   required>
+                   class="w-16 h-8 pr-1 col-start-2 justify-self-center w-full"
+                   required
+                   tabindex="3"
+                   value="{{ form.value.value }}">
             <div x-show="type == 'mass'">{% translate "g" %}</div>
-            <div>{% translate "pieces" %}</div>
-            <div>{% translate "packs" %}</div>
+            <div class=""
+                 x-show="type == 'piece'">{% translate "pieces" %}</div>
+            <div x-show="type == 'pack'">{% translate "packs" %}</div>
         </div>
-    </div>
+    </fieldset>
+
     <div class="flex flex-row justify-evenly">
         <button type="submit"
-                class="p-2 border border-zinc-400 rounded-xl w-24">
-            {% translate "OK" %}
-        </button>
-        <button type="close"
                 class="p-2 border border-zinc-400 rounded-xl w-24"
-                formnovalidate
-                formmethod="dialog">{% translate "Cancel" %}</button>
+                tabindex="4">{% translate "OK" %}</button>
+        <button type="button"
+                class="p-2 border border-zinc-400 rounded-xl w-24"
+                @click="$refs.recordDialog.close()">
+            {% translate "Cancel" %}
+        </button>
     </div>
 </form>

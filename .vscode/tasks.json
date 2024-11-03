@@ -6,11 +6,13 @@
         {
             "label": "django runserver",
             "type": "shell",
+            "group": "build",
             "command": "python manage.py runserver 0.0.0.0:8000",
         },
         {
             "label": "django tailwind start",
             "type": "shell",
+            "group": "build",
             "command": "python manage.py tailwind start",
         },
         {
@@ -41,7 +43,14 @@
         {
             "label": "django test",
             "type": "shell",
+            "group": "test",
             "command": "python manage.py test",
+        },
+        {
+            "label": "django test app",
+            "type": "shell",
+            "group": "test",
+            "command": "python manage.py test ${input:app}",
         },
         {
             "label": "python venv",

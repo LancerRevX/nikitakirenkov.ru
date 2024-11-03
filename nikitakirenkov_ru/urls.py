@@ -22,6 +22,7 @@ from django.conf.urls.i18n import i18n_patterns
 urlpatterns = [
     path("_nested_admin/", include("nested_admin.urls")),
     path("__reload__/", include("django_browser_reload.urls")),
+    path("auth/", include("django.contrib.auth.urls")),
 ]
 
 urlpatterns += i18n_patterns(

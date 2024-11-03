@@ -15,7 +15,6 @@ document.addEventListener('alpine:init', () => {
         },
 
         init() {
-            console.log('init');
             this.resize();
         }
     }));

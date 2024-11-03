@@ -33,7 +33,10 @@ class Day(models.Model):
 
     date = models.DateField(_("date"), default=default_date)
     user = models.ForeignKey(
-        FoodUser, models.CASCADE, related_name="days", verbose_name=_("user")
+        FoodUser,
+        models.CASCADE,
+        related_name="food_days",
+        verbose_name=_("user"),
     )
     diet = models.ForeignKey(
         Diet,
@@ -166,6 +169,14 @@ class Item(models.Model):
             )
         return result
 
+    def get_available_record_types(self):
+        available_types = [Record.Type.MASS]
+        if self.piece_mass:
+            available_types.append(Record.Type.PIECE)
+        if self.pack_mass:
+            available_types.append(Record.Type.PACK)
+        return available_types
+
     class Meta:
         verbose_name = _("item")
         verbose_name_plural = _("items")
@@ -255,13 +266,19 @@ class Record(models.Model):
         return self.item.calories * self.mass / 100.0
 
     @property
-    def mass(self):
+    def mass(self) -> float:
         if self.type == self.Type.MASS:
             return self.value
         elif self.type == self.Type.PIECE:
-            return self.item.piece_mass * self.value
+            return (
+                self.item.piece_mass * self.value
+                if self.item.piece_mass
+                else 0.0
+            )
         else:
-            return self.item.pack_mass * self.value
+            return (
+                self.item.pack_mass * self.value if self.item.pack_mass else 0.0
+            )
 
     class Meta:
         verbose_name = _("record")
