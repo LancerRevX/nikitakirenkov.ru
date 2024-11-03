@@ -19,6 +19,7 @@
             <div hx-get="{% url "food:edit-record" date=day.date meal_position=meal.position record_position=record.position %}"
                  hx-swap="none"
                  hx-trigger="click"
+                 hx-indicator="#indicator"
                  class="cursor-pointer flex-1 flex flex-row">
                 <div class="flex-1 px-2 min-w-0 text-wrap leading-none {{ divider_class }} !justify-start"
                      title="{{ record.item }}"

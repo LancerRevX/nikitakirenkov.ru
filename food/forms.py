@@ -32,8 +32,6 @@ class MealForm(forms.ModelForm):
 
 
 class ItemSearchForm(forms.Form):
-    template_name = "food/forms/item_search_form.html"
-
     query = forms.CharField(
         max_length=128, required=False, empty_value="", initial=""
     )
@@ -46,13 +44,22 @@ class ItemSearchForm(forms.Form):
         self.queryset = user.food_items.all()
 
     def get_items(self) -> QuerySet | None:
+
         if not self.is_valid():
             return None
         items = self.queryset
         if group := self.cleaned_data["group"]:
             items = items.filter(group=group)
         if query := self.cleaned_data["query"]:
-            items = items.filter(name__icontains=query)
+
+            def filter_item(item):
+                if query.lower() in item.name.lower():
+                    return True
+                return False
+
+            items = filter(filter_item, items)
+            print(items)
+
         return items
 
 
