@@ -1,9 +1,11 @@
 {% load i18n %}
 {% with divider_class="flex flex-row justify-center items-center relative last:after:hidden after:block after:absolute after:w-[2px] after:bg-slate-300 after:h-[0.85rem] after:right-0" %}
     <article class="flex flex-col  border-2 rounded-lg border-slate-300 mb-2 cursor-context-menu"
-             x-sort:item="{{ record.position }}">
-        <header class="flex flex-row border-b-2 border-zinc-300">
-            <div class="w-8 {{ divider_class }} cursor-grab active:cursor-grabbing"
+             x-sort:item="{{ record.position }}"
+             id="meal_{{ meal.position }}_record_{{ record.position }}"
+             hx-swap-oob="true">
+        <header class="flex flex-row border-b-2 border-zinc-300 h-8">
+            <div class="w-8 flex border-r-2 border-inherit flex-row justify-center items-center cursor-grab active:cursor-grabbing"
                  x-sort:handle>
                 <svg xmlns="http://www.w3.org/2000/svg"
                      fill="none"
@@ -14,29 +16,34 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                 </svg>
             </div>
-            <div class="flex-1 px-2 min-w-0 text-nowrap {{ divider_class }} !justify-start"
-                 title="{{ record.item }}"
-                 x-data="recordName"
-                 @resize.window="resize">{{ record.item|capfirst }}</div>
-            <div class="w-20 {{ divider_class }}">
-                {% if record.type == record.Type.MASS %}
-                    <div class="text-center  flex-1"
-                         title="{% translate "mass" %}">
-                        {% blocktranslate with mass=record.value|floatformat %}{{ mass }}g{% endblocktranslate %}
-                    </div>
-                {% elif record.type == record.Type.PIECE %}
-                    <div class="text-center flex-1  "
-                         title="{% translate "pieces" %}">
-                        {% blocktranslate with pieces=record.value|floatformat:-2 %}{{ pieces }} pieces{% endblocktranslate %}
-                    </div>
-                {% elif record.type == record.Type.PACK %}
-                    <div class="text-center  flex-1 "
-                         title="{% translate "packs" %}">
-                        {% blocktranslate with packs=record.value %}{{ packs }} packs{% endblocktranslate %}
-                    </div>
-                {% endif %}
+            <div hx-get="{% url "food:edit-record" date=day.date meal_position=meal.position record_position=record.position %}"
+                 hx-swap="none"
+                 hx-trigger="click"
+                 class="cursor-pointer flex-1 flex flex-row">
+                <div class="flex-1 px-2 min-w-0 text-wrap leading-none {{ divider_class }} !justify-start"
+                     title="{{ record.item }}"
+                     x-data="recordName"
+                     @resize.window="resize">{{ record.item|capfirst }}</div>
+                <div class="w-20 {{ divider_class }}">
+                    {% if record.type == record.Type.MASS %}
+                        <div class="text-center  flex-1"
+                             title="{% translate "mass" %}">
+                            {% blocktranslate with mass=record.value|floatformat %}{{ mass }}g{% endblocktranslate %}
+                        </div>
+                    {% elif record.type == record.Type.PIECE %}
+                        <div class="text-center flex-1  "
+                             title="{% translate "pieces" %}">
+                            {% blocktranslate with pieces=record.value|floatformat:-2 %}{{ pieces }} pieces{% endblocktranslate %}
+                        </div>
+                    {% elif record.type == record.Type.PACK %}
+                        <div class="text-center  flex-1 "
+                             title="{% translate "packs" %}">
+                            {% blocktranslate with packs=record.value %}{{ packs }} packs{% endblocktranslate %}
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-            <button class="w-8 flex justify-center items-center"
+            <button class="w-8 flex justify-center items-center border-l-2 border-inherit"
                     hx-post="{% url "food:destroy-record" date=day.date meal_position=meal.position record_position=record.position %}"
                     hx-confirm="{% translate "Delete record?" %}">
                 <svg xmlns="http://www.w3.org/2000/svg"

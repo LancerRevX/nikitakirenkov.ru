@@ -51,10 +51,19 @@ urlpatterns = [
         name="create-record",
     ),
     path(
+        "days/<date:date>/meals/<int:meal_position>/records/<int:record_position>/edit",
+        views.edit_record,
+        name="edit-record",
+    ),
+    path(
+        "days/<date:date>/meals/<int:meal_position>/records/<int:record_position>/update",
+        views.update_record,
+        name="update-record",
+    ),
+    path(
         "days/<date:date>/meals/<int:meal_position>/records/<int:record_position>/destroy",
         views.destroy_record,
         name="destroy-record",
     ),
-    path("preview-record", views.preview_record, name="preview-record"),
     path("items/", views.ItemView.as_view(), name="items"),
 ]

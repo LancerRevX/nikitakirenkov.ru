@@ -1,13 +1,17 @@
 {% load i18n %}
 <form id="record-form"
       class="min-h-0 flex flex-col gap-4"
-      {% if not form.is_bound %} hx-post="{% url "food:records" date=day.date meal_position=meal.position %}" {% endif %}
+      {% if form.instance %} hx-post="{% url "food:update-record" date=day.date meal_position=meal.position record_position=form.instance.position %}" {% else %} hx-post="{% url "food:records" date=day.date meal_position=meal.position %}" {% endif %}
       hx-swap="none"
       hx-swap-oob="true"
       hx-include="#items"
-      x-data="{ type: '{{ form.type.value }}' }">
+      x-data="{ type: '{{ form.type.value }}', item: '{{ form.item.value }}' }">
     <h2 class="block text-center text-lg font-semibold">
-        {% translate "Add new record" %}
+        {% if form.instance %}
+            {% translate "Edit record" %}
+        {% else %}
+            {% translate "Add new record" %}
+        {% endif %}
     </h2>
     <input type="search"
            name="query"
@@ -22,7 +26,7 @@
            value="{{ form.query.value }}">
     <div id="items"
          class="min-h-0 overflow-y-scroll h-48"
-         hx-preserve>
+         x-init="if (item) $refs[`item${item}`].scrollIntoView({block: 'center'})">
         {% include "food/items.html" with items=form.fields.item.queryset %}
     </div>
 

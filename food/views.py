@@ -87,12 +87,6 @@ class RecordView(LoginRequiredMixin, View):
 
         record_form = RecordForm(request.user, request.POST)
         if not record_form.is_valid():
-            if record_form.errors.get("type"):
-                return render(
-                    request,
-                    record_form.template_name,
-                    {"day": day, "meal": meal, "form": record_form},
-                )
             return HttpResponseBadRequest()
 
         position = meal.records.count()
@@ -138,6 +132,62 @@ def create_record(
         },
     )
     return trigger_client_event(response, "open-record-dialog")
+
+
+@require_GET
+@login_required
+def edit_record(
+    request: HttpRequest,
+    date: datetime.date,
+    meal_position: int,
+    record_position: int,
+):
+    day = get_object_or_404(Day, user=request.user, date=date)
+    meal = get_object_or_404(day.meals, position=meal_position)
+    record = get_object_or_404(meal.records, position=record_position)
+
+    record_form = RecordForm(request.user, instance=record)
+
+    response = render(
+        request,
+        "food/forms/record_form.html",
+        {
+            "day": day,
+            "meal": meal,
+            "form": record_form,
+        },
+    )
+    return trigger_client_event(response, "open-record-dialog")
+
+
+@require_POST
+@login_required
+def update_record(
+    request: HttpRequest,
+    date: datetime.date,
+    meal_position: int,
+    record_position: int,
+):
+    day = get_object_or_404(Day, user=request.user, date=date)
+    meal = get_object_or_404(day.meals, position=meal_position)
+    record = get_object_or_404(meal.records, position=record_position)
+
+    record_form = RecordForm(request.user, request.POST, instance=record)
+    if not record_form.is_valid():
+        return HttpResponseBadRequest()
+
+    record = record_form.save()
+
+    response = render(
+        request,
+        "food/htmx/update_record.html",
+        {
+            "day": day,
+            "meal": meal,
+            "record": record,
+        },
+    )
+    return trigger_client_event(response, "close-record-dialog")
 
 
 @require_POST
