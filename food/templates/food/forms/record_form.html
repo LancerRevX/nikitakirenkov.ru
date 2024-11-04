@@ -1,13 +1,13 @@
 {% load i18n %}
 <form id="record-form"
       class="min-h-0 flex flex-col gap-4"
-      {% if form.instance %} hx-post="{% url "food:update-record" date=day.date meal_id=meal.id record_id=form.instance.id %}" {% else %} hx-post="{% url "food:store-record" date=day.date meal_id=meal.id %}" {% endif %}
+      {% if form.is_bound %} hx-post="{% url "food:update-record" date=day.date meal_id=meal.id record_id=form.instance.id %}" {% else %} hx-post="{% url "food:store-record" date=day.date meal_id=meal.id %}" {% endif %}
       hx-swap="none"
       hx-swap-oob="true"
       hx-include="#items"
       x-data="{ type: '{{ form.type.value }}', item: '{{ form.item.value }}' }">
     <h2 class="block text-center text-lg font-semibold">
-        {% if form.instance %}
+        {% if form.is_bound %}
             {% translate "Edit record" %}
         {% else %}
             {% translate "Add new record" %}

@@ -1,7 +1,8 @@
 <div id="meal-{{ meal.position }}-records"
      x-data
      x-sort
-     hx-swap-oob="true">
+     hx-swap-oob="true"
+     class="flex flex-col gap-2">
     {% for record in meal.records.all %}
         {% include "food/record.html" %}
     {% endfor %}

@@ -5,38 +5,38 @@
          x-data="{ position: {{ meal.position }} }">
     <form hx-post="{% url "food:update-meal" date=day.date meal_id=meal.id %}"
           x-init="$watch('position', () => $dispatch('submit'))">
-        <input type="hidden"
-               name="position"
-               x-model="position">
+        <input type="hidden" name="position" x-model="position">
     </form>
-    <header class="h-6 flex flex-row bg-inherit">
-        <div class="w-8 flex justify-center"
-             x-sort:handle>
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 fill="none"
-                 viewBox="0 0 24 24"
-                 stroke-width="1.5"
-                 stroke="currentColor"
-                 class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-            </svg>
-        </div>
-        <div class="flex-1"></div>
-        <button class="w-8 flex justify-center items-center"
-                hx-post="{% url "food:destroy-meal" date=day.date meal_id=meal.id %}"
-                hx-confirm="{% translate "Are you sure?" %}">
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 fill="none"
-                 viewBox="0 0 24 24"
-                 stroke-width="1.5"
-                 stroke="currentColor"
-                 class="size-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-            </svg>
-        </button>
-    </header>
-    <div class="p-4 bg-white">
+    {% if not day.is_locked %}
+        <header class="h-6 flex flex-row bg-inherit">
+            <div class="w-8 flex justify-center" x-sort:handle>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke-width="1.5"
+                     stroke="currentColor"
+                     class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                </svg>
+            </div>
+            <div class="flex-1"></div>
+            <button class="w-8 flex justify-center items-center"
+                    hx-post="{% url "food:destroy-meal" date=day.date meal_id=meal.id %}"
+                    hx-confirm="{% translate "Are you sure?" %}">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke-width="1.5"
+                     stroke="currentColor"
+                     class="size-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </header>
+    {% endif %}
+    <div class="p-4 flex flex-col gap-4 bg-white">
         {% include "food/records.html" %}
+        {% if not day.is_locked %}
         <button class="py-1 w-full flex justify-center rounded-lg border-2 border-lime-500 bg-lime-300 cursor-pointer"
                 title="{% translate "Add new record" %}"
                 hx-get="{% url "food:create-record" date=day.date meal_id=meal.id %}"
@@ -51,6 +51,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
         </button>
+        {% endif %}
     </div>
     {% include "food/meal_summary.html" %}
 </article>
