@@ -28,7 +28,11 @@
                      x-data="recordName"
                      @resize.window="resize">{{ record.item|capfirst }}</div>
                 <div class="w-20 {{ divider_class }}">
-                    {% if record.type == record.Type.MASS %}
+                    <div class="text-center  flex-1"
+                             title="{% translate "mass" %}">
+                            {% blocktranslate with mass=record.mass|floatformat %}{{ mass }}g{% endblocktranslate %}
+                        </div>
+                    {% comment %} {% if record.type == record.Type.MASS %}
                         <div class="text-center  flex-1"
                              title="{% translate "mass" %}">
                             {% blocktranslate with mass=record.value|floatformat %}{{ mass }}g{% endblocktranslate %}
@@ -43,7 +47,7 @@
                              title="{% translate "packs" %}">
                             {% blocktranslate with packs=record.value|floatformat:-2 %}{{ packs }} packs{% endblocktranslate %}
                         </div>
-                    {% endif %}
+                    {% endif %} {% endcomment %}
                 </div>
             </div>
             {% if not day.is_locked %}
