@@ -1,8 +1,8 @@
 import datetime
 
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponseBadRequest
 from django.shortcuts import render, redirect
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth.decorators import login_required
 
 from ..forms import DayForm
@@ -35,3 +35,19 @@ def show_day(request: HttpRequest, date: datetime.date | None = None):
         "food/index.html",
         {"day": day},
     )
+
+@require_POST
+@login_required
+def update_day(request: HttpRequest, date: datetime.date):
+    day = Day.objects.get_or_create(user=request.user, date=date)[0]
+
+    day_form = DayForm(request.POST, instance=day)
+
+    if not day_form.is_valid():
+        return HttpResponseBadRequest()
+    
+    day_form.save()
+
+    return render(request, 'food/htmx/index.html', {'day': day})
+
+

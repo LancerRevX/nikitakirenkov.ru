@@ -24,6 +24,7 @@ urlpatterns = [
     path("", RedirectView.as_view(url="days/")),
     path("days/", views.show_day, name="index-days"),
     path("days/<date:date>/", views.show_day, name="show-day"),
+    path("days/<date:date>/update/", views.update_day, name="update-day"),
     path("days/<date:date>/meals/", views.store_meal, name="store-meal"),
     path(
         "days/<date:date>/meals/<int:meal_id>/update/",

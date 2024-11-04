@@ -4,13 +4,19 @@ from django.conf import settings
 from django.db.models import QuerySet, Max, Min
 from django.core.exceptions import ValidationError
 
-from .models import Group, Item, Record, Meal
+from .models import Day, Group, Item, Record, Meal
 
 
-class DayForm(forms.Form):
+class DayForm(forms.ModelForm):
     date = forms.DateField(
-        input_formats=["%Y-%m-%d"], required=True, label=_("date")
+        input_formats=["%Y-%m-%d"], required=False, label=_("date")
     )
+    is_locked = forms.BooleanField(required=False)
+
+    class Meta:
+        model = Day
+        fields = ['date', 'is_locked']
+
 
 
 class MealForm(forms.ModelForm):
