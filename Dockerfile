@@ -7,6 +7,9 @@ RUN apt install apache2 libapache2-mod-wsgi-py3 -y
 # for psycopg2
 RUN apt install gcc libpq-dev python3-dev -y
 
+# for django-tailwind
+RUN apt install nodejs
+
 WORKDIR /var/www/html/
 RUN python3 -m venv .venv
 ENV PATH="/var/www/html/.venv/bin/:$PATH"
@@ -41,10 +44,8 @@ RUN pip install -r requirements.txt
 
 COPY . .
 ENV STATIC_ROOT=/var/www/html/static/
+RUN python manage.py tailwind build
 RUN python3 manage.py collectstatic
+RUN python manage.py migrate
 
-RUN echo "python manage.py migrate" >> start_server.sh
-RUN echo "apachectl -DFOREGROUND" >> start_server.sh
-RUN chmod +x start_server.sh
-
-CMD bash -c './start_server.sh'
+CMD apachectl -DFOREGROUND
