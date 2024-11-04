@@ -112,6 +112,11 @@ DATABASES = {
         "USER": environ.get("DB_USER"),
         "PASSWORD": environ.get("DB_PASSWORD"),
         "HOST": environ.get("DB_HOST"),
+        'PORT': environ.get("DB_PORT"),
+        "TEST": {
+            "ENGINE": 'django.db.backends.sqlite3',
+            'NAME': 'db.sqlite3'
+        }
     }
 }
 

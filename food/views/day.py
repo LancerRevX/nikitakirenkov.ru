@@ -19,7 +19,7 @@ def show_day(request: HttpRequest, date: datetime.date | None = None):
         else:
             date = datetime.date.today()
 
-        return redirect("food:days", date=date)
+        return redirect("food:show-day", date=date)
 
     day_query = Day.objects.filter(date=date)
     if day_query.exists():

@@ -30,7 +30,6 @@ def default_date():
 
 
 class Day(models.Model):
-
     date = models.DateField(_("date"), default=default_date)
     user = models.ForeignKey(
         FoodUser,
@@ -47,6 +46,7 @@ class Day(models.Model):
         related_name="days",
     )
     meals: models.Manager["Meal"]
+    is_locked = models.BooleanField(_('is locked'), default=False)
 
     def __str__(self) -> str:
         return str(self.date)
