@@ -39,7 +39,7 @@
             <input class="border-0 border-l focus:outline-none focus:ring-0 focus:border-inherit size-12 border-zinc-200"
                    type="date"
                    name="date"
-                   hx-get="{% url "food:days" %}"
+                   hx-get="{% url "food:index-days" %}"
                    hx-swap="none"
                    hx-push-url="true">
         </header>
@@ -48,7 +48,7 @@
             <div class="flex justify-center">
                 <button class="p-2 rounded-xl border-2 border-lime-500 bg-lime-300 cursor-pointer"
                         title="{% translate "Add new meal" %}"
-                        hx-post="{% url "food:meals" date=day.date %}"
+                        hx-post="{% url "food:store-meal" date=day.date %}"
                         hx-swap="none">
                     <svg xmlns="http://www.w3.org/2000/svg"
                          fill="none"

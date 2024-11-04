@@ -1,7 +1,7 @@
 {% load i18n %}
 <form id="record-form"
       class="min-h-0 flex flex-col gap-4"
-      {% if form.instance %} hx-post="{% url "food:update-record" date=day.date meal_position=meal.position record_position=form.instance.position %}" {% else %} hx-post="{% url "food:records" date=day.date meal_position=meal.position %}" {% endif %}
+      {% if form.instance %} hx-post="{% url "food:update-record" date=day.date meal_id=meal.id record_id=form.instance.id %}" {% else %} hx-post="{% url "food:store-record" date=day.date meal_id=meal.id %}" {% endif %}
       hx-swap="none"
       hx-swap-oob="true"
       hx-include="#items"
@@ -16,7 +16,7 @@
     <input type="search"
            name="query"
            class="rounded-lg"
-           hx-get="{% url "food:items" %}"
+           hx-get="{% url "food:index-items" %}"
            hx-target="#items"
            hx-swap="innerHTML"
            hx-trigger="input delay:200ms"

@@ -68,9 +68,8 @@ class RecordForm(forms.ModelForm):
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.user = user
         self.fields["item"] = forms.ModelChoiceField(
-            self.user.food_items.all(), required=True
+            user.food_items.all(), required=True, initial=None
         )
 
     class Meta:

@@ -14,8 +14,13 @@ class UpdateMealTest(TestCase):
         self.user = get_user_model().objects.create(username="testuser")
         self.client.force_login(self.user)
         self.day = self.user.food_days.create(date=datetime.date.today())
+
         for _ in range(10):
-            self.day.meals.create()
+            response = self.client.post(reverse('food:store-meal', kwargs=dict(date=self.day.date)))
+            self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(self.day.meals.count(), 10)
+            
         return super().setUp()
 
     def make_request(self, meal, new_position):
@@ -24,7 +29,7 @@ class UpdateMealTest(TestCase):
                 "food:update-meal",
                 kwargs=dict(
                     date=self.day.date,
-                    meal_position=meal.position,
+                    meal_id=meal.id,
                 ),
             ),
             {"position": new_position},
@@ -53,7 +58,8 @@ class UpdateMealTest(TestCase):
                 )
             )
             response = self.make_request(meal, new_position)
-            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.status_code, 204)
+            self.assertEqual(len(response.content), 0)
 
             meal.refresh_from_db()
             self.assertEqual(meal.position, new_position)

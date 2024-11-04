@@ -2,7 +2,7 @@
 <form class="flex-1 flex flex-col items-center min-h-0"
       id="item-search-form"
       x-ref="itemSearchForm"
-      hx-get="{% url "food:items" %}"
+      hx-get="{% url "food:index-items" %}"
       hx-trigger="input from:#item-search-input delay:200ms,submit,change,htmx:oobAfterSwap from:window target:#record-form"
       hx-target="#items"
       hx-swap-oob="true">

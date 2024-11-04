@@ -22,48 +22,43 @@ register_converter(DateConverter, "date")
 
 urlpatterns = [
     path("", RedirectView.as_view(url="days/")),
+    path("days/", views.show_day, name="index-days"),
+    path("days/<date:date>/", views.show_day, name="show-day"),
+    path("days/<date:date>/meals/", views.store_meal, name="store-meal"),
     path(
-        "days/<date:date>/meals/<int:meal_position>/update/",
+        "days/<date:date>/meals/<int:meal_id>/update/",
         views.update_meal,
         name="update-meal",
     ),
-    path("days/", views.DayView.as_view(), name="days"),
-    path("days/<date:date>/", views.DayView.as_view(), name="days"),
-    path("days/<date:date>/meals/", views.MealView.as_view(), name="meals"),
     path(
-        "days/<date:date>/meals/<int:meal_position>/",
-        views.MealView.as_view(),
-        name="meals",
+        "days/<date:date>/meals/<int:meal_id>/",
+        views.destroy_meal,
+        name="destroy-meal",
     ),
     path(
-        "days/<date:date>/meals/<int:meal_position>/records/",
-        views.RecordView.as_view(),
-        name="records",
-    ),
-    path(
-        "days/<date:date>/meals/<int:meal_position>/records/<int:record_position>/",
-        views.RecordView.as_view(),
-        name="records",
-    ),
-    path(
-        "days/<date:date>/meals/<int:meal_position>/records/create",
+        "days/<date:date>/meals/<int:meal_id>/records/create",
         views.create_record,
         name="create-record",
     ),
     path(
-        "days/<date:date>/meals/<int:meal_position>/records/<int:record_position>/edit",
+        "days/<date:date>/meals/<int:meal_id>/records/store",
+        views.store_record,
+        name="store-record",
+    ),
+    path(
+        "days/<date:date>/meals/<int:meal_id>/records/<int:record_id>/edit",
         views.edit_record,
         name="edit-record",
     ),
     path(
-        "days/<date:date>/meals/<int:meal_position>/records/<int:record_position>/update",
+        "days/<date:date>/meals/<int:meal_id>/records/<int:record_id>/update",
         views.update_record,
         name="update-record",
     ),
     path(
-        "days/<date:date>/meals/<int:meal_position>/records/<int:record_position>/destroy",
+        "days/<date:date>/meals/<int:meal_id>/records/<int:record_id>/destroy",
         views.destroy_record,
         name="destroy-record",
     ),
-    path("items/", views.ItemView.as_view(), name="items"),
+    path("items/", views.index_items, name="index-items"),
 ]
