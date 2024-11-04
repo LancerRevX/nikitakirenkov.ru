@@ -46,3 +46,5 @@ RUN python3 manage.py collectstatic
 RUN echo "python manage.py migrate" >> start_server.sh
 RUN echo "apachectl -DFOREGROUND" >> start_server.sh
 RUN chmod +x start_server.sh
+
+CMD bash -c './start_server.sh'
