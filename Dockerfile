@@ -44,8 +44,9 @@ RUN pip install -r requirements.txt
 
 COPY . .
 ENV STATIC_ROOT=/var/www/html/static/
+RUN python manage.py tailwind install
 RUN python manage.py tailwind build
-RUN python3 manage.py collectstatic
+RUN python manage.py collectstatic
 RUN python manage.py migrate
 
 CMD apachectl -DFOREGROUND
