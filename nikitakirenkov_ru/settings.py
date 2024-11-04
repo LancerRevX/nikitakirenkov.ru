@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from os import environ
+import sys
 
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
@@ -112,13 +113,13 @@ DATABASES = {
         "USER": environ.get("DB_USER"),
         "PASSWORD": environ.get("DB_PASSWORD"),
         "HOST": environ.get("DB_HOST"),
-        'PORT': environ.get("DB_PORT"),
-        "TEST": {
-            "ENGINE": 'django.db.backends.sqlite3',
-            'NAME': 'db.sqlite3'
-        }
+        'PORT': environ.get("DB_PORT")
     }
 }
+
+if 'test' in sys.argv:
+    DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
+    DATABASES['default']['NAME'] = 'db.sqlite3'
 
 
 # Password validation

@@ -65,7 +65,7 @@ def edit_record(
     meal = get_object_or_404(day.meals, id=meal_id)
     record = get_object_or_404(meal.records, id=record_id)
 
-    record_form = RecordForm(request.user, {}, instance=record)
+    record_form = RecordForm(request.user, instance=record)
 
     response = render(
         request,

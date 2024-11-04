@@ -12,7 +12,7 @@ class FoodUser(User):
 
 class Diet(models.Model):
     user = models.ForeignKey(
-        FoodUser, models.CASCADE, related_name="diets", verbose_name=_("user")
+        FoodUser, models.CASCADE, related_name="food_diets", verbose_name=_("user")
     )
     name = models.CharField(_("name"), max_length=64)
     protein = models.FloatField(_("protein"), null=True, blank=True)
@@ -84,7 +84,7 @@ class Comment(models.Model):
     user = models.ForeignKey(
         FoodUser,
         models.CASCADE,
-        related_name="comments",
+        related_name="food_comments",
         verbose_name=_("user"),
     )
     text = models.TextField(_("text"))
@@ -122,11 +122,22 @@ class ItemType(models.Model):
     user = models.ForeignKey(
         FoodUser,
         models.CASCADE,
-        related_name="item_types",
+        related_name="food_item_types",
         verbose_name=_("user"),
     )
     name = models.CharField(_("name"), max_length=32)
-    color = models.CharField(_("color"), max_length=7)
+
+    def __str__(self):
+        return self.name
+    
+class ItemBrand(models.Model):
+    user = models.ForeignKey(
+        FoodUser,
+        models.CASCADE,
+        related_name="food_item_brands",
+        verbose_name=_("user"),
+    )
+    name = models.CharField(_("name"), max_length=32)
 
     def __str__(self):
         return self.name
@@ -147,6 +158,14 @@ class Item(models.Model):
         verbose_name=_("type"),
         related_name="items",
     )
+    brand = models.ForeignKey(
+        ItemBrand,
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_("brand"),
+        related_name="items",
+    )
     groups: models.Manager[Group]
     name = models.CharField(_("name"), max_length=256)
     # groups = models.ManyToManyField(
@@ -160,14 +179,21 @@ class Item(models.Model):
     pack_mass = models.FloatField(_("pack mass"), null=True, blank=True)
 
     def __str__(self):
-        result = self.name
+        result = []
         if self.type is not None:
-            result = f"{self.type} {result}"
+            result.append(str(self.type))
+        if self.brand is not None:
+            result.append(str(self.brand))
+        result.append(self.name)
         if self.groups.count() > 0:
-            result += (
-                f" [{', '.join(self.groups.values_list('name', flat=True))}]"
+            result.append(
+                self.groups_str
             )
-        return result
+        return ' '.join(result)
+    
+    @property
+    def groups_str(self):
+        return f"[{', '.join(self.groups.values_list('name', flat=True))}]"
 
     def get_available_record_types(self):
         available_types = [Record.Type.MASS]

@@ -65,20 +65,18 @@ class GroupAdmin(AdminWithAutoSelectedUser):
 
 @admin.register(models.Item)
 class ItemAdmin(AdminWithAutoSelectedUser):
-    search_fields = ["name"]
+    list_display = ['id', 'type', 'brand', 'name', 'groups_str']
+    list_display_links = ['id']
+    search_fields = ["name", 'type__name', 'brand__name', 'groups__name']
     inlines = [GroupInline]
     autocomplete_fields = ["type"]
     list_filter = ["groups"]
 
 
-class ItemTypeForm(forms.ModelForm):
-    class Meta:
-        model = models.ItemType
-        fields = "__all__"
-        widgets = {"color": forms.widgets.TextInput(attrs={"type": "color"})}
-
-
 @admin.register(models.ItemType)
 class ItemTypeAdmin(AdminWithAutoSelectedUser):
     search_fields = ["name"]
-    form = ItemTypeForm
+
+@admin.register(models.ItemBrand)
+class ItemBrandAdmin(AdminWithAutoSelectedUser):
+    search_fields = ['name']

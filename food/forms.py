@@ -59,7 +59,7 @@ class ItemSearchForm(forms.Form):
         if query := self.cleaned_data["query"]:
 
             def filter_item(item):
-                if query.lower() in item.name.lower():
+                if query.lower() in str(item).lower():
                     return True
                 return False
 

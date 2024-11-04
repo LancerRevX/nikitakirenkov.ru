@@ -14,7 +14,7 @@ from ..models import Day
 def show_day(request: HttpRequest, date: datetime.date | None = None):
     if date is None:
         day_form = DayForm(request.GET)
-        if day_form.is_valid():
+        if day_form.is_valid() and day_form.cleaned_data.get('date'):
             date = day_form.cleaned_data["date"]
         else:
             date = datetime.date.today()
