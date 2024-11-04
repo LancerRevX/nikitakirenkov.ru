@@ -8,7 +8,7 @@ RUN apt install apache2 libapache2-mod-wsgi-py3 -y
 RUN apt install gcc libpq-dev python3-dev -y
 
 # for django-tailwind
-RUN apt install nodejs -y
+RUN apt install nodejs npm -y
 
 WORKDIR /var/www/html/
 RUN python3 -m venv .venv
