@@ -71,6 +71,7 @@ class ItemAdmin(AdminWithAutoSelectedUser):
     inlines = [GroupInline]
     autocomplete_fields = ["type"]
     list_filter = ["groups"]
+    ordering = ['-id']
 
 
 @admin.register(models.ItemType)
