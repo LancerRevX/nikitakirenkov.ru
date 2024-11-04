@@ -47,6 +47,11 @@ ENV STATIC_ROOT=/var/www/html/static/
 RUN python manage.py tailwind install
 RUN python manage.py tailwind build
 RUN python manage.py collectstatic
-RUN python manage.py migrate
 
-CMD apachectl -DFOREGROUND
+COPY <<EOF start.sh
+python manage.py migrate
+apachectl -DFOREGROUND
+EOF
+
+RUN chmod +x start.sh
+CMD bash -c ./start.sh
