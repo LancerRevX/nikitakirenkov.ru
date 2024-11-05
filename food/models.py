@@ -46,7 +46,7 @@ class Day(models.Model):
         related_name="days",
     )
     meals: models.Manager["Meal"]
-    is_locked = models.BooleanField(_('is locked'), default=False)
+    is_locked = models.BooleanField(_("is locked"), default=False)
 
     def __str__(self) -> str:
         return str(self.date)
@@ -129,12 +129,26 @@ class ItemType(models.Model):
 
     def __str__(self):
         return self.name
-    
+
+
 class ItemBrand(models.Model):
     user = models.ForeignKey(
         FoodUser,
         models.CASCADE,
         related_name="food_item_brands",
+        verbose_name=_("user"),
+    )
+    name = models.CharField(_("name"), max_length=32)
+
+    def __str__(self):
+        return self.name
+
+
+class ItemRestaurant(models.Model):
+    user = models.ForeignKey(
+        FoodUser,
+        models.CASCADE,
+        related_name="food_item_restaurants",
         verbose_name=_("user"),
     )
     name = models.CharField(_("name"), max_length=32)
@@ -166,8 +180,16 @@ class Item(models.Model):
         verbose_name=_("brand"),
         related_name="items",
     )
+    restaurant = models.ForeignKey(
+        ItemRestaurant,
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_("restaurant"),
+        related_name="items",
+    )
     groups: models.Manager[Group]
-    name = models.CharField(_("name"), max_length=256)
+    name = models.CharField(_("name"), max_length=256, blank=True)
     # groups = models.ManyToManyField(
     #     Group, related_name="items", verbose_name=_("groups")
     # )
@@ -185,12 +207,14 @@ class Item(models.Model):
         if self.brand is not None:
             result.append(str(self.brand))
         result.append(self.name)
-        if self.groups.count() > 0:
-            result.append(
-                self.groups_str
-            )
-        return ' '.join(result)
-    
+        if self.restaurant is not None:
+            result.append(f"({self.restaurant})")
+        # if self.groups.count() > 0:
+        #     result.append(
+        #         self.groups_str
+        #     )
+        return " ".join(result)
+
     @property
     def groups_str(self):
         return f"[{', '.join(self.groups.values_list('name', flat=True))}]"
@@ -253,9 +277,7 @@ class Record(models.Model):
     item = models.ForeignKey(
         Item, models.PROTECT, verbose_name=_("item"), related_name="records"
     )
-    type = models.CharField(
-        _("type"), max_length=5, choices=Type, default=Type.MASS
-    )
+    type = models.CharField(_("type"), max_length=5, choices=Type, default=Type.MASS)
     value = models.FloatField(_("value"))
     position = models.PositiveBigIntegerField(_("position"), default=0)
 
@@ -270,9 +292,7 @@ class Record(models.Model):
             )
         else:
             return (
-                str(self.item)
-                + " "
-                + ngettext_lazy("%f pack", "%f packs", self.value)
+                str(self.item) + " " + ngettext_lazy("%f pack", "%f packs", self.value)
             )
 
     @property
@@ -296,15 +316,9 @@ class Record(models.Model):
         if self.type == self.Type.MASS:
             return self.value
         elif self.type == self.Type.PIECE:
-            return (
-                self.item.piece_mass * self.value
-                if self.item.piece_mass
-                else 0.0
-            )
+            return self.item.piece_mass * self.value if self.item.piece_mass else 0.0
         else:
-            return (
-                self.item.pack_mass * self.value if self.item.pack_mass else 0.0
-            )
+            return self.item.pack_mass * self.value if self.item.pack_mass else 0.0
 
     class Meta:
         verbose_name = _("record")

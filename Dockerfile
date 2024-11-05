@@ -43,6 +43,7 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY . .
+ENV NPM_BIN_PATH=/usr/bin/npm
 ENV STATIC_ROOT=/var/www/html/static/
 RUN python manage.py tailwind install
 RUN python manage.py tailwind build

@@ -32,11 +32,11 @@ SECRET_KEY = (
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(environ["DEBUG"])
+DEBUG = environ.get("DEBUG")
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 if environ.get("ALLOWED_HOSTS"):
-    ALLOWED_HOSTS += environ["ALLOWED_HOSTS"].split(",")
+    ALLOWED_HOSTS += environ.get("ALLOWED_HOSTS").split(",")
 CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://127.0.0.1"]
 
 INTERNAL_IPS = [
@@ -108,8 +108,8 @@ LOGIN_URL = "/auth/login/"
 
 DATABASES = {
     "default": {
-        "ENGINE": environ["DB_ENGINE"],
-        "NAME": environ["DB_NAME"],
+        "ENGINE": environ.get("DB_ENGINE"),
+        "NAME": environ.get("DB_NAME"),
         "USER": environ.get("DB_USER"),
         "PASSWORD": environ.get("DB_PASSWORD"),
         "HOST": environ.get("DB_HOST"),

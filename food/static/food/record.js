@@ -1,5 +1,5 @@
 document.addEventListener('alpine:init', () => {
-    Alpine.data('recordName', () => ({
+    Alpine.data('resizableText', () => ({
         resize() {
             this.$el.style.fontSize = "";
             let fontSize = window.getComputedStyle(this.$el).getPropertyValue('font-size');

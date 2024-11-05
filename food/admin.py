@@ -72,6 +72,7 @@ class ItemAdmin(AdminWithAutoSelectedUser):
     autocomplete_fields = ["type"]
     list_filter = ["groups"]
     ordering = ['-id']
+    save_as=True
 
 
 @admin.register(models.ItemType)
@@ -80,4 +81,8 @@ class ItemTypeAdmin(AdminWithAutoSelectedUser):
 
 @admin.register(models.ItemBrand)
 class ItemBrandAdmin(AdminWithAutoSelectedUser):
+    search_fields = ['name']
+
+@admin.register(models.ItemRestaurant)
+class ItemRestaurantAdmin(AdminWithAutoSelectedUser):
     search_fields = ['name']
