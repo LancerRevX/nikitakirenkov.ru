@@ -9,12 +9,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{% translate "food"|title %}</title>
         <script defer src="{% static "food/record.js" %}"></script>
-        {% comment %} <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/sort@3.x.x/dist/cdn.min.js"></script> {% endcomment %}
-        <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+        {% if not day.is_locked %}<script defer src="{% static "scripts/alpine.sort.min.js" %}"></script>{% endif %}
+        <script defer src="{% static "scripts/alpine.focus.min.js" %}"></script>
         <!-- Alpine Core -->
         <script defer
-                src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        <script src="https://unpkg.com/htmx.org@2.0.3"
+                src="{% static "scripts/alpine.min.js" %}"></script>
+        <script src="{% static "scripts/htmx.min.js" %}"
                 integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
                 crossorigin="anonymous"></script>
         {% tailwind_css %}

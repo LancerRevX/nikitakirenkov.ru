@@ -1,8 +1,10 @@
 from datetime import datetime, date
+from typing import Collection
 
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _, ngettext_lazy
+from django.core.exceptions import ValidationError
 
 
 class FoodUser(User):
@@ -125,7 +127,7 @@ class ItemType(models.Model):
         related_name="food_item_types",
         verbose_name=_("user"),
     )
-    name = models.CharField(_("name"), max_length=32)
+    name = models.CharField(_("name"), max_length=32, unique=True)
 
     def __str__(self):
         return self.name
@@ -138,7 +140,7 @@ class ItemBrand(models.Model):
         related_name="food_item_brands",
         verbose_name=_("user"),
     )
-    name = models.CharField(_("name"), max_length=32)
+    name = models.CharField(_("name"), max_length=32, unique=True)
 
     def __str__(self):
         return self.name
@@ -151,7 +153,7 @@ class ItemRestaurant(models.Model):
         related_name="food_item_restaurants",
         verbose_name=_("user"),
     )
-    name = models.CharField(_("name"), max_length=32)
+    name = models.CharField(_("name"), max_length=32, unique=True)
 
     def __str__(self):
         return self.name
@@ -189,7 +191,7 @@ class Item(models.Model):
         related_name="items",
     )
     groups: models.Manager[Group]
-    name = models.CharField(_("name"), max_length=256, blank=True)
+    name = models.CharField(_("name"), max_length=256, null=True, blank=True)
     # groups = models.ManyToManyField(
     #     Group, related_name="items", verbose_name=_("groups")
     # )
@@ -226,11 +228,21 @@ class Item(models.Model):
         if self.pack_mass:
             available_types.append(Record.Type.PACK)
         return available_types
+    
+    def validate_constraints(self, exclude) -> None:
+        if Item.objects.filter(type=self.type, brand=self.brand, restaurant=self.restaurant, name=self.name).exists():
+            raise ValidationError(_('Same item already exists!'))
+        return super().validate_constraints(exclude)
 
     class Meta:
         verbose_name = _("item")
         verbose_name_plural = _("items")
         ordering = ["name"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["type", "brand", "restaurant", "name"], name="unique_item"
+            )
+        ]
 
 
 class Meal(models.Model):

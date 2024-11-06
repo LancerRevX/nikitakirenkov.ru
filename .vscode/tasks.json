@@ -37,6 +37,11 @@
       "command": "python manage.py makemigrations"
     },
     {
+      "label": "django makemigrations & migrate",
+      "type": "shell",
+      "dependsOn": ["django makemigrations", "django migrate"]
+    },
+    {
       "label": "django createsuperuser",
       "type": "shell",
       "command": "python manage.py createsuperuser --username nikita --email nikitakirenkov@gmail.com"
