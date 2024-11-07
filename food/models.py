@@ -228,10 +228,19 @@ class Item(models.Model):
         if self.pack_mass:
             available_types.append(Record.Type.PACK)
         return available_types
-    
+
     def validate_constraints(self, exclude) -> None:
-        if Item.objects.filter(type=self.type, brand=self.brand, restaurant=self.restaurant, name=self.name).exists():
-            raise ValidationError(_('Same item already exists!'))
+        if (
+            Item.objects.filter(
+                type=self.type,
+                brand=self.brand,
+                restaurant=self.restaurant,
+                name=self.name,
+            )
+            .exclude(id=self.id)
+            .exists()
+        ):
+            raise ValidationError(_("Same item already exists!"))
         return super().validate_constraints(exclude)
 
     class Meta:
