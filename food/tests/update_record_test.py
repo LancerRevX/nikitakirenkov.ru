@@ -16,9 +16,9 @@ class UpdateRecordTest(TestCase):
 
         for i in range(5):
             response = self.client.post(
-                reverse("food:store-meal", kwargs=dict(date=self.day.date))
+                reverse("food:meals", kwargs=dict(date=self.day.date))
             )
-            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.status_code, 201)
             meal = response.context.get("meal")
             self.assertIsNotNone(meal)
             for j in range(5):
@@ -27,7 +27,7 @@ class UpdateRecordTest(TestCase):
 
                 response = self.client.post(
                     reverse(
-                        "food:store-record",
+                        "food:records",
                         kwargs=dict(date=self.day.date, meal_id=meal.id),
                     ),
                     {
@@ -36,7 +36,7 @@ class UpdateRecordTest(TestCase):
                         'value': randint(1, 300),
                     }
                 )
-                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.status_code, 201)
                 self.assertIsNotNone(response.context.get("record"))
 
         return super().setUp()
@@ -85,7 +85,7 @@ class UpdateRecordTest(TestCase):
     #                     if i != record.position
     #                 )
     #             )
-    #             response = self.client.post(reverse('food:update-record', kwargs=dict(date=self.day.date, meal_id=meal.id, record_id=record.id)))
+    #             response = self.client.patch(reverse('food:records', kwargs=dict(date=self.day.date, meal_id=meal.id, record_id=record.id)))
     #             self.assertEqual(response.status_code, 204)
     #             self.assertEqual(len(response.content), 0)
 

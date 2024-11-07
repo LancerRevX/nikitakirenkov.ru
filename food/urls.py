@@ -22,19 +22,23 @@ register_converter(DateConverter, "date")
 
 urlpatterns = [
     path("", RedirectView.as_view(url="days/")),
-    path("days/", views.show_day, name="index-days"),
-    path("days/<date:date>/", views.show_day, name="show-day"),
-    path("days/<date:date>/update/", views.update_day, name="update-day"),
-    path("days/<date:date>/meals/", views.store_meal, name="store-meal"),
-    path(
-        "days/<date:date>/meals/<int:meal_id>/update/",
-        views.update_meal,
-        name="update-meal",
-    ),
+    path("days/", views.DayView.as_view(), name="days"),
+    path("days/<date:date>/", views.DayView.as_view(), name="days"),
+    path("days/<date:date>/meals/", views.MealView.as_view(), name="meals"),
     path(
         "days/<date:date>/meals/<int:meal_id>/",
-        views.destroy_meal,
-        name="destroy-meal",
+        views.MealView.as_view(),
+        name="meals",
+    ),
+    path(
+        "days/<date:date>/meals/<int:meal_id>/records/",
+        views.RecordView.as_view(),
+        name="records",
+    ),
+    path(
+        "days/<date:date>/meals/<int:meal_id>/records/<int:record_id>/",
+        views.RecordView.as_view(),
+        name="records",
     ),
     path(
         "days/<date:date>/meals/<int:meal_id>/records/create",
@@ -42,24 +46,9 @@ urlpatterns = [
         name="create-record",
     ),
     path(
-        "days/<date:date>/meals/<int:meal_id>/records/store",
-        views.store_record,
-        name="store-record",
-    ),
-    path(
         "days/<date:date>/meals/<int:meal_id>/records/<int:record_id>/edit",
         views.edit_record,
         name="edit-record",
-    ),
-    path(
-        "days/<date:date>/meals/<int:meal_id>/records/<int:record_id>/update",
-        views.update_record,
-        name="update-record",
-    ),
-    path(
-        "days/<date:date>/meals/<int:meal_id>/records/<int:record_id>/destroy",
-        views.destroy_record,
-        name="destroy-record",
     ),
     path("items/", views.index_items, name="index-items"),
 ]

@@ -43,14 +43,17 @@
                         <div class="text-center  flex-1 "
                              title="{% translate "packs" %}">
                             {% blocktranslate with packs=record.value|floatformat:-2 %}{{ packs }} packs{% endblocktranslate %}
+                            ({% blocktranslate with mass=record.mass|floatformat %}{{ mass }}g{% endblocktranslate %})
                         </div>
                     {% endif %}
                 </div>
             </div>
             {% if not day.is_locked %}
             <button class="w-8 flex justify-center items-center border-l-2 border-inherit"
-                    hx-post="{% url "food:destroy-record" date=day.date meal_id=meal.id record_id=record.id %}"
-                    hx-confirm="{% translate "Delete record?" %}">
+                    hx-delete="{% url "food:records" date=day.date meal_id=meal.id record_id=record.id %}"
+                    hx-confirm="{% translate "Delete record?" %}"
+                    hx-target="#meal_{{ meal.position }}_record_{{ record.position }}"
+                    hx-swap="delete">
                 <svg xmlns="http://www.w3.org/2000/svg"
                      fill="none"
                      viewBox="0 0 24 24"

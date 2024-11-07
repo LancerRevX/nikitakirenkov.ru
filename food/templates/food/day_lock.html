@@ -1,6 +1,6 @@
 <button class="size-12 flex justify-center items-center border-l border-zinc-200"
         id="day-lock"
-        hx-post="{% url "food:update-day" date=day.date %}"
+        hx-post="{% url "food:days" date=day.date %}"
         hx-include="#is_locked_field"
         hx-swap="none"
         hx-indicator="#indicator"

@@ -65,12 +65,13 @@ class GroupAdmin(AdminWithAutoSelectedUser):
 
 @admin.register(models.Item)
 class ItemAdmin(AdminWithAutoSelectedUser):
-    list_display = ['id', 'type', 'brand', 'name', 'groups_str']
+    list_display = ['id', 'type', 'brand', 'name', 'restaurant', 'groups_str']
     list_display_links = ['id']
-    search_fields = ["name", 'type__name', 'brand__name', 'groups__name']
+    list_editable = ['restaurant']
+    search_fields = ["name", 'type__name', 'brand__name', 'restaurant__name', 'groups__name']
     inlines = [GroupInline]
     autocomplete_fields = ["type"]
-    list_filter = ["groups"]
+    list_filter = ["groups", 'type', 'brand', 'restaurant']
     ordering = ['-id']
     save_as=True
 

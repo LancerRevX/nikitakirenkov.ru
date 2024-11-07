@@ -27,9 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = (
-    "django-insecure-t@^iuc40=bc_b0)zh@^ld5(v$4kr6_6r+ganat=+)oh9-mzxc1"
-)
+SECRET_KEY = "django-insecure-t@^iuc40=bc_b0)zh@^ld5(v$4kr6_6r+ganat=+)oh9-mzxc1"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = environ.get("DEBUG")
@@ -65,7 +63,7 @@ INSTALLED_APPS = [
 
 TAILWIND_APP_NAME = "theme"
 
-NPM_BIN_PATH = environ['NPM_BIN_PATH']
+NPM_BIN_PATH = environ["NPM_BIN_PATH"]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -113,13 +111,14 @@ DATABASES = {
         "USER": environ.get("DB_USER"),
         "PASSWORD": environ.get("DB_PASSWORD"),
         "HOST": environ.get("DB_HOST"),
-        'PORT': environ.get("DB_PORT")
+        "PORT": environ.get("DB_PORT"),
     }
 }
 
-if 'test' in sys.argv:
-    DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
-    DATABASES['default']['NAME'] = 'db.sqlite3'
+if "test" in sys.argv:
+    DATABASES = {
+        "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": "db.sqlite3"}
+    }
 
 
 # Password validation
@@ -165,7 +164,7 @@ STATIC_URL = "static/"
 
 STATIC_ROOT = environ.get("STATIC_ROOT")
 
-STATICFILES_DIRS = ['static/']
+STATICFILES_DIRS = ["nikitakirenkov_ru/static/"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

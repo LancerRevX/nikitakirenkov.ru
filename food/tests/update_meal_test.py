@@ -1,10 +1,12 @@
 import datetime
 from random import choice, randint
+from urllib.parse import urlencode
 
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.db.models import Max, Min
+from django.test.client import MULTIPART_CONTENT
 
 from ..models import Day, Meal
 
@@ -16,23 +18,24 @@ class UpdateMealTest(TestCase):
         self.day = self.user.food_days.create(date=datetime.date.today())
 
         for _ in range(10):
-            response = self.client.post(reverse('food:store-meal', kwargs=dict(date=self.day.date)))
-            self.assertEqual(response.status_code, 200)
+            response = self.client.post(reverse('food:meals', kwargs=dict(date=self.day.date)))
+            self.assertEqual(response.status_code, 201)
 
         self.assertEqual(self.day.meals.count(), 10)
             
         return super().setUp()
 
     def make_request(self, meal, new_position):
-        return self.client.post(
+        return self.client.patch(
             reverse(
-                "food:update-meal",
+                "food:meals",
                 kwargs=dict(
                     date=self.day.date,
                     meal_id=meal.id,
                 ),
             ),
-            {"position": new_position},
+            urlencode({"position": new_position}),
+            content_type='application/x-www-form-urlencoded'
         )
 
     def test_initial_positions_are_correct(self):
