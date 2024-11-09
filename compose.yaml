@@ -7,3 +7,4 @@ services:
       - "host.docker.internal:host-gateway"
     env_file:
       - docker.env
+    restart: always
