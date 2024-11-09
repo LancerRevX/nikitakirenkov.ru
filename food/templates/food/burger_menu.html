@@ -1,0 +1,25 @@
+{% load i18n %}
+<div class="fixed h-screen top-0 pt-12 -left-64 z-30 transition-all"
+     :class="{'!left-0': isBurgerMenuShown}">
+    <nav class="  w-64 h-full  bg-white shadow flex flex-col justify-between p-4">
+        <ul class="flex flex-col gap-4">
+            <li class="border-2 border-zinc-200 text-center p-2 rounded-lg">
+                {% translate "Edit food items" %}
+            </li>
+            <li class="border-2 border-zinc-200 text-center p-2 rounded-lg">
+                {% translate "Edit food groups" %}
+            </li>
+            <li class="border-2 border-zinc-200 text-center p-2 rounded-lg">
+                {% translate "View weight graph" %}
+            </li>
+        </ul>
+        <div class="justify-self-end flex flex-row justify-between">
+            <div>{{ user.username }}</div>
+            <button class="hover:underline">{% translate "Log out" %}</button>
+        </div>
+    </nav>
+</div>
+<div x-show="isBurgerMenuShown"
+     @click="isBurgerMenuShown = false"
+     class="backdrop-blur bg-zinc-400 bg-opacity-30 absolute top-0 left-0 z-20 w-screen h-screen">
+</div>

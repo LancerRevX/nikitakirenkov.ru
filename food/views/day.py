@@ -1,20 +1,25 @@
 import datetime
 
-from django.http import HttpRequest, HttpResponseBadRequest
+from django.http import (
+    HttpRequest,
+    HttpResponse,
+    HttpResponseBadRequest,
+    QueryDict,
+)
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 
-from ..forms import DayForm
+from ..forms import DateForm, DayForm
 from ..models import Day
 
 
 class DayView(LoginRequiredMixin, View):
     def get(self, request: HttpRequest, date: datetime.date | None = None):
         if date is None:
-            day_form = DayForm(request.GET)
-            if day_form.is_valid() and day_form.cleaned_data.get('date'):
-                date = day_form.cleaned_data["date"]
+            date_form = DateForm(request.GET)
+            if date_form.is_valid() and date_form.cleaned_data.get("date"):
+                date = date_form.cleaned_data["date"]
             else:
                 date = datetime.date.today()
 
@@ -32,19 +37,21 @@ class DayView(LoginRequiredMixin, View):
         return render(
             request,
             "food/index.html",
-            {"day": day},
-    )
+            {"day": day, "user": request.user},
+        )
 
     def patch(self, request: HttpRequest, date: datetime.date):
         day = Day.objects.get_or_create(user=request.user, date=date)[0]
 
-        day_form = DayForm(request.POST, instance=day)
+        form_data = QueryDict(request.body)
+        day_form = DayForm(form_data, instance=day)
 
-        if not day_form.is_valid():
+        if not day_form.is_valid() or len(day_form.data) == 0:
             return HttpResponseBadRequest()
-        
+
         day_form.save()
 
-        return render(request, 'food/htmx/index.html', {'day': day})
-
-
+        if day_form.data.get("is_locked") is not None:
+            return render(request, "food/htmx/index.html", {"day": day})
+        else:
+            return HttpResponse(None, status=204)

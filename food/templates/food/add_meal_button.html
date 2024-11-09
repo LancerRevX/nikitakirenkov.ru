@@ -1,18 +1,18 @@
 {% load i18n %}
-<div class="flex justify-center" id="add-meal-button" hx-swap-oob="true">
-    {% if not day.is_locked %}
-        <button class="p-2 rounded-xl border-2 border-lime-500 bg-lime-300 cursor-pointer mb-4"
-                title="{% translate "Add new meal" %}"
-                hx-post="{% url "food:meals" date=day.date %}"
-                hx-swap="none">
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 fill="none"
-                 viewBox="0 0 24 24"
-                 stroke-width="2"
-                 stroke="currentColor"
-                 class="size-6 text-lime-600">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-        </button>
-    {% endif %}
-</div>
+{% if not day.is_locked %}
+    <button class="p-2 rounded-xl border-2 border-lime-500 bg-lime-300 cursor-pointer mb-4"
+            title="{% translate "Add new meal" %}"
+            hx-post="{% url "food:meals" date=day.date %}"
+            hx-swap="none"
+            id="add-meal-button"
+            hx-swap-oob="true">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             fill="none"
+             viewBox="0 0 24 24"
+             stroke-width="2"
+             stroke="currentColor"
+             class="size-6 text-lime-600">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+    </button>
+{% endif %}

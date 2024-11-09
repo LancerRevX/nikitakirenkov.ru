@@ -1,0 +1,17 @@
+{% load i18n %}
+<div id="weight"
+     hx-swap-oob="true">
+    {% if not day.is_locked %}
+        <article class="mb-4">
+            <label for="weight-input">{% translate "Weight" %}</label>
+            <input type="text"
+                   name="weight"
+                   id="weight-input"
+                   value="{{ day.weight|default:"" }}"
+                   hx-patch="{% url "food:days" date=day.date %}">
+            <span>{% translate "kg" %}</span>
+        </article>
+    {% elif day.weight is not None %}
+        <div>{{ day.weight }} {% translate "kg" %}</div>
+    {% endif %}
+</div>

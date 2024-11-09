@@ -7,16 +7,14 @@ from django.core.exceptions import ValidationError
 from .models import Day, Group, Item, Record, Meal
 
 
-class DayForm(forms.ModelForm):
-    date = forms.DateField(
-        input_formats=["%Y-%m-%d"], required=False, label=_("date")
-    )
-    is_locked = forms.BooleanField(required=False)
+class DateForm(forms.Form):
+    date = forms.DateField(input_formats=["%Y-%m-%d"])
 
+
+class DayForm(forms.ModelForm):
     class Meta:
         model = Day
-        fields = ['date', 'is_locked']
-
+        fields = ["weight", "is_locked"]
 
 
 class MealForm(forms.ModelForm):

@@ -14,7 +14,10 @@ class FoodUser(User):
 
 class Diet(models.Model):
     user = models.ForeignKey(
-        FoodUser, models.CASCADE, related_name="food_diets", verbose_name=_("user")
+        FoodUser,
+        models.CASCADE,
+        related_name="food_diets",
+        verbose_name=_("user"),
     )
     name = models.CharField(_("name"), max_length=64)
     protein = models.FloatField(_("protein"), null=True, blank=True)
@@ -49,6 +52,7 @@ class Day(models.Model):
     )
     meals: models.Manager["Meal"]
     is_locked = models.BooleanField(_("is locked"), default=False)
+    weight = models.FloatField(_("weight"), null=True, blank=True)
 
     def __str__(self) -> str:
         return str(self.date)
@@ -249,7 +253,8 @@ class Item(models.Model):
         ordering = ["name"]
         constraints = [
             models.UniqueConstraint(
-                fields=["type", "brand", "restaurant", "name"], name="unique_item"
+                fields=["type", "brand", "restaurant", "name"],
+                name="unique_item",
             )
         ]
 
@@ -298,7 +303,9 @@ class Record(models.Model):
     item = models.ForeignKey(
         Item, models.PROTECT, verbose_name=_("item"), related_name="records"
     )
-    type = models.CharField(_("type"), max_length=5, choices=Type, default=Type.MASS)
+    type = models.CharField(
+        _("type"), max_length=5, choices=Type, default=Type.MASS
+    )
     value = models.FloatField(_("value"))
     position = models.PositiveBigIntegerField(_("position"), default=0)
 
@@ -313,7 +320,9 @@ class Record(models.Model):
             )
         else:
             return (
-                str(self.item) + " " + ngettext_lazy("%f pack", "%f packs", self.value)
+                str(self.item)
+                + " "
+                + ngettext_lazy("%f pack", "%f packs", self.value)
             )
 
     @property
@@ -337,9 +346,15 @@ class Record(models.Model):
         if self.type == self.Type.MASS:
             return self.value
         elif self.type == self.Type.PIECE:
-            return self.item.piece_mass * self.value if self.item.piece_mass else 0.0
+            return (
+                self.item.piece_mass * self.value
+                if self.item.piece_mass
+                else 0.0
+            )
         else:
-            return self.item.pack_mass * self.value if self.item.pack_mass else 0.0
+            return (
+                self.item.pack_mass * self.value if self.item.pack_mass else 0.0
+            )
 
     class Meta:
         verbose_name = _("record")
