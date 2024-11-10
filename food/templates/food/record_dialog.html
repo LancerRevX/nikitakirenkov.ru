@@ -1,7 +1,7 @@
 {% load i18n %}
 <dialog id="record-dialog"
         x-ref="recordDialog"
-        class="p-4 w-[330px] h-[480px] overflow-hidden max-h-none flex flex-col gap-4"
+        class="p-4 w-[330px] h-[480px] overflow-hidden max-h-none open:flex flex-col gap-4"
         hx-swap-oob="true"
         x-init="$el.showModal(); $refs['item{{ item.id }}'].scrollIntoView({block: 'center'})"
         @close-record-dialog.window="$el.close()"
