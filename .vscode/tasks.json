@@ -64,6 +64,17 @@
       "command": "python manage.py test ${input:app}"
     },
     {
+      "label": "django makemessages",
+      "type": "shell",
+      "command": "python manage.py makemessages -l ru",
+    },
+    {
+      "label": "django compilemessages",
+      "type": "shell",
+      "group": "test",
+      "command": "python manage.py compilemessages"
+    },
+    {
       "label": "python venv",
       "type": "shell",
       "command": "python -m venv .venv"

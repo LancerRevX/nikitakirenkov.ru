@@ -3,7 +3,7 @@
      hx-swap-oob="true">
     {% if not day.is_locked %}
         <article class="mb-4">
-            <label for="weight-input">{% translate "Weight" %}</label>
+            <label for="weight-input">{% translate "weight"|capfirst %}</label>
             <input type="text"
                    name="weight"
                    id="weight-input"
@@ -13,7 +13,7 @@
         </article>
     {% elif day.weight is not None %}
         <div class="mb-4">
-            {% translate "Weight" %}: {{ day.weight }} {% translate "kg" %}
+            {% translate "weight"|capfirst %}: {{ day.weight }} {% translate "kg" %}
         </div>
     {% endif %}
 </div>

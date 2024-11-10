@@ -3,9 +3,9 @@
         x-ref="recordDialog"
         class="p-4 w-[330px] h-[480px] overflow-hidden max-h-none open:flex flex-col gap-4"
         hx-swap-oob="true"
-        x-init="$el.showModal(); $refs['item{{ item.id }}'].scrollIntoView({block: 'center'})"
+        x-init="$el.showModal(); {% if item %} $refs['item{{ item.id }}'].scrollIntoView({block: 'center'}) {% endif %}"
         @close-record-dialog.window="$el.close()"
-        x-data="{ item: {{ item.id }} }">
+        {% if item %} x-data="{ item: {{ item.id }} }" {% endif %}>
         <h2 class="block text-center text-lg font-semibold">
             {% if record_form.instance.id %}
                 {% translate "Edit record" %}

@@ -1,10 +1,12 @@
+{% load i18n %}
 <button class="size-12 flex justify-center items-center border-l border-zinc-200"
         id="day-lock"
         hx-patch="{% url "food:days" date=day.date %}"
         hx-swap="none"
         hx-indicator="#indicator"
         hx-swap-oob="true"
-        hx-vals='{ "is_locked": {{ day.is_locked|yesno:"false,true" }} }'>
+        hx-vals='{ "is_locked": {{ day.is_locked|yesno:"false,true" }} }'
+        title="{% translate "lock day" %}">
     {% if day.is_locked %}
         {# lock-closed #}
         <svg xmlns="http://www.w3.org/2000/svg"

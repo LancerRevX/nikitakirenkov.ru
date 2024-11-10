@@ -1,0 +1,307 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-10 19:52+0700\n"
+"PO-Revision-Date: 2024-11-10 20:09+0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Generator: Poedit 3.5\n"
+
+#: .\models.py:20 .\models.py:43 .\models.py:94 .\models.py:111 .\models.py:132
+#: .\models.py:145 .\models.py:158 .\models.py:171
+msgid "user"
+msgstr "пользователь"
+
+#: .\models.py:22 .\models.py:113 .\models.py:134 .\models.py:147
+#: .\models.py:160 .\models.py:198
+msgid "name"
+msgstr "название"
+
+#: .\models.py:23 .\models.py:202 .\templates\food\day_summary.html:7
+#: .\templates\food\meal_summary.html:6 .\templates\food\preview_record.html:7
+#: .\templates\food\record.html:71
+msgid "protein"
+msgstr "белки"
+
+#: .\models.py:24 .\models.py:203 .\templates\food\day_summary.html:13
+#: .\templates\food\meal_summary.html:10
+#: .\templates\food\preview_record.html:13 .\templates\food\record.html:75
+msgid "fat"
+msgstr "жиры"
+
+#: .\models.py:25 .\models.py:204 .\templates\food\day_summary.html:19
+#: .\templates\food\meal_summary.html:14
+#: .\templates\food\preview_record.html:19 .\templates\food\record.html:79
+msgid "carbs"
+msgstr "углеводы"
+
+#: .\models.py:26 .\models.py:205 .\templates\food\day_summary.html:25
+#: .\templates\food\meal_summary.html:18
+#: .\templates\food\preview_record.html:25 .\templates\food\record.html:83
+msgid "calories"
+msgstr "калории"
+
+#: .\models.py:29 .\models.py:50
+msgid "diet"
+msgstr "диета"
+
+#: .\models.py:30
+msgid "diets"
+msgstr "диеты"
+
+#: .\models.py:38
+msgid "date"
+msgstr "дата"
+
+#: .\models.py:54
+msgid "is locked"
+msgstr "заблокирован"
+
+#: .\models.py:55
+msgid "weight"
+msgstr "вес"
+
+#: .\models.py:80 .\models.py:264
+msgid "day"
+msgstr "день"
+
+#: .\models.py:81
+msgid "days"
+msgstr "дни"
+
+#: .\models.py:96
+msgid "text"
+msgstr "текст"
+
+#: .\models.py:102
+msgid "comment"
+msgstr "комментарий"
+
+#: .\models.py:103
+msgid "comments"
+msgstr "комментарии"
+
+#: .\models.py:114
+msgid "color"
+msgstr "цвет"
+
+#: .\models.py:116 .\models.py:252
+msgid "items"
+msgstr "блюда"
+
+#: .\models.py:123
+msgid "group"
+msgstr "группа"
+
+#: .\models.py:124
+msgid "groups"
+msgstr "группы"
+
+#: .\models.py:178 .\models.py:307
+msgid "type"
+msgstr "тип"
+
+#: .\models.py:186
+msgid "brand"
+msgstr "производитель"
+
+#: .\models.py:194
+msgid "restaurant"
+msgstr "ресторан"
+
+#: .\models.py:202 .\models.py:203 .\models.py:204 .\models.py:205
+msgid "Per 100g."
+msgstr "На 100 г."
+
+#: .\models.py:206
+msgid "piece mass"
+msgstr "масса 1 шт"
+
+#: .\models.py:207
+msgid "pack mass"
+msgstr "масса упаковки"
+
+#: .\models.py:247
+msgid "Same item already exists!"
+msgstr "Такое блюдо уже существует!"
+
+#: .\models.py:251 .\models.py:304
+msgid "item"
+msgstr "блюдо"
+
+#: .\models.py:289 .\models.py:301
+msgid "meal"
+msgstr "приём пищи"
+
+#: .\models.py:290
+msgid "meals"
+msgstr "приёмы пищи"
+
+#: .\models.py:296
+msgid "Mass"
+msgstr "вес"
+
+#: .\models.py:297
+msgid "Piece"
+msgstr "штука"
+
+#: .\models.py:298
+msgid "Pack"
+msgstr "упаковка"
+
+#: .\models.py:309
+msgid "value"
+msgstr "значение"
+
+#: .\models.py:310
+msgid "position"
+msgstr "позиция"
+
+#: .\models.py:319
+#, python-format
+msgid "%f piece"
+msgid_plural "%f pieces"
+msgstr[0] "%f штука"
+msgstr[1] "%f штуки"
+msgstr[2] "%f штук"
+
+#: .\models.py:325
+#, python-format
+msgid "%f pack"
+msgid_plural "%f packs"
+msgstr[0] "%f упаковка"
+msgstr[1] "%f упаковки"
+msgstr[2] "%f упаковок"
+
+#: .\models.py:360
+msgid "record"
+msgstr "запись"
+
+#: .\models.py:361
+msgid "records"
+msgstr "записи"
+
+#: .\templates\food\add_meal_button.html:4
+msgid "Add new meal"
+msgstr "Новый приём пищи"
+
+#: .\templates\food\burger_menu.html:7
+msgid "Edit food items"
+msgstr "Изменить блюда"
+
+#: .\templates\food\burger_menu.html:10
+msgid "Edit food groups"
+msgstr "Изменить группы блюд"
+
+#: .\templates\food\burger_menu.html:13
+msgid "View weight graph"
+msgstr "Построить график веса"
+
+#: .\templates\food\burger_menu.html:18
+msgid "Log out"
+msgstr "Выйти"
+
+#: .\templates\food\day_summary.html:8 .\templates\food\day_summary.html:14
+#: .\templates\food\day_summary.html:20 .\templates\food\meal_summary.html:7
+#: .\templates\food\meal_summary.html:11 .\templates\food\meal_summary.html:15
+#: .\templates\food\preview_record.html:8
+#: .\templates\food\preview_record.html:14
+#: .\templates\food\preview_record.html:20 .\templates\food\record.html:34
+#: .\templates\food\record.html:40 .\templates\food\record.html:46
+#: .\templates\food\record.html:72 .\templates\food\record.html:76
+#: .\templates\food\record.html:80
+#, python-format
+msgid "%(mass)sg"
+msgstr "%(mass)s г"
+
+#: .\templates\food\forms\item_search_form.html:28
+msgid "Search"
+msgstr "Поиск"
+
+#: .\templates\food\forms\record_form.html:36
+#: .\templates\food\forms\record_form_type_partial.html:29
+msgid "g"
+msgstr "г"
+
+#: .\templates\food\forms\record_form.html:38
+#: .\templates\food\forms\record_form_type_partial.html:31
+#: .\templates\food\record.html:38
+msgid "pieces"
+msgstr "шт"
+
+#: .\templates\food\forms\record_form.html:39
+#: .\templates\food\forms\record_form_type_partial.html:32
+#: .\templates\food\record.html:44
+msgid "packs"
+msgstr "уп"
+
+#: .\templates\food\forms\record_form.html:47
+msgid "OK"
+msgstr "Готово"
+
+#: .\templates\food\forms\record_form.html:51
+msgid "Cancel"
+msgstr "Отмена"
+
+#: .\templates\food\index.html:11
+msgid "food"
+msgstr "еда"
+
+#: .\templates\food\meal.html:25
+msgid "Are you sure?"
+msgstr "Вы уверены?"
+
+#: .\templates\food\meal.html:43 .\templates\food\record_dialog.html:13
+#: .\tests\record.py:42
+msgid "Add new record"
+msgstr "Новая запись"
+
+#: .\templates\food\record.html:33
+msgid "mass"
+msgstr "вес"
+
+#: .\templates\food\record.html:39
+#, python-format
+msgid "%(pieces)s pieces"
+msgstr "%(pieces)s шт"
+
+#: .\templates\food\record.html:45
+#, python-format
+msgid "%(packs)s packs"
+msgstr "%(packs)s уп"
+
+#: .\templates\food\record.html:54
+msgid "Delete record?"
+msgstr "Удалить запись?"
+
+#: .\templates\food\record_dialog.html:11 .\tests\record.py:114
+msgid "Edit record"
+msgstr "Изменить запись"
+
+#: .\templates\food\weight.html:6 .\templates\food\weight.html:16
+msgid "Weight"
+msgstr "вес"
+
+#: .\templates\food\weight.html:12 .\templates\food\weight.html:16
+msgid "kg"
+msgstr "кг"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                                    %(mass)sg\n"
+#~ "                                                "
+#~ msgstr "%(mass)sг"

@@ -4,7 +4,8 @@
       {% if form.instance.id %} hx-patch="{% url "food:records" date=day.date meal_id=meal.id record_id=form.instance.id %}" {% else %} hx-post="{% url "food:records" date=day.date meal_id=meal.id %}" {% endif %}
       hx-swap="none"
       hx-swap-oob="true"
-      x-data="{ type: '{{ form.type.value }}' }">
+      x-data="{ type: '{{ form.type.value }}' }"
+      hx-vals='{"item": {{ item.id }} }'>
     
 
     <fieldset class="flex flex-col gap-4 items-center">

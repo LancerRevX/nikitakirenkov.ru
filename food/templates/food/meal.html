@@ -43,8 +43,7 @@
                 title="{% translate "Add new record" %}"
                 hx-get="{% url "food:records:create" date=day.date meal_id=meal.id %}"
                 hx-swap="none"
-                hx-indicator="#indicator"
-                @load.window="$el.click()">
+                hx-indicator="#indicator">
             <svg xmlns="http://www.w3.org/2000/svg"
                  fill="none"
                  viewBox="0 0 24 24"
