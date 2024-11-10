@@ -4,41 +4,11 @@ from django.conf import settings
 from django.db.models import QuerySet, Max, Min
 from django.core.exceptions import ValidationError
 
-from .models import Day, Group, Item, Record, Meal
-
-
-class DateForm(forms.Form):
-    date = forms.DateField(input_formats=["%Y-%m-%d"])
-
-
-class DayForm(forms.ModelForm):
-    class Meta:
-        model = Day
-        fields = ["weight", "is_locked"]
-
-
-class MealForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["position"] = forms.IntegerField(
-            max_value=self.instance.day.meals.aggregate(
-                position=Max("position")
-            )["position"],
-            min_value=self.instance.day.meals.aggregate(
-                position=Min("position")
-            )["position"],
-            required=True,
-        )
-
-    class Meta:
-        model = Meal
-        fields = ["position"]
+from ..models import Day, Group, Item, Record, Meal
 
 
 class ItemSearchForm(forms.Form):
-    query = forms.CharField(
-        max_length=128, required=False, empty_value="", initial=""
-    )
+    query = forms.CharField(max_length=128, required=False, empty_value="", initial="")
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -62,9 +32,16 @@ class ItemSearchForm(forms.Form):
                 return False
 
             items = filter(filter_item, items)
-            print(items)
 
         return items
+
+
+class RecordDialogForm(forms.Form):
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["item"] = forms.ModelChoiceField(
+            user.food_items.all(), required=False
+        )
 
 
 class RecordForm(forms.ModelForm):
@@ -72,6 +49,15 @@ class RecordForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    def clean(self):
+        type = self.cleaned_data.get("type")
+        item = self.cleaned_data.get("item")
+        if not type or not item:
+            return
+
+        if type not in item.get_available_record_types():
+            raise ValidationError(f'type "{type}" is not supported by item "{item}"')
 
     class Meta:
         model = Record

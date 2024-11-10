@@ -41,9 +41,10 @@
         {% if not day.is_locked %}
         <button class="py-1 w-full flex justify-center rounded-lg border-2 border-lime-500 bg-lime-300 cursor-pointer"
                 title="{% translate "Add new record" %}"
-                hx-get="{% url "food:create-record" date=day.date meal_id=meal.id %}"
+                hx-get="{% url "food:records:create" date=day.date meal_id=meal.id %}"
                 hx-swap="none"
-                hx-indicator="#indicator">
+                hx-indicator="#indicator"
+                @load.window="$el.click()">
             <svg xmlns="http://www.w3.org/2000/svg"
                  fill="none"
                  viewBox="0 0 24 24"

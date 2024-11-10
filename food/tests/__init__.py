@@ -1,1 +1,1 @@
-from .update_meal_test import UpdateMealTest
+from .record import *

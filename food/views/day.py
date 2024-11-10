@@ -12,7 +12,7 @@ from django.views import View
 from django.forms import modelform_factory
 from django.core.exceptions import FieldError
 
-from ..forms import DateForm, DayForm
+from ..forms import DateForm, DayForm, ItemSearchForm
 from ..models import Day
 
 

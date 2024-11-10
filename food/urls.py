@@ -41,14 +41,26 @@ urlpatterns = [
         name="records",
     ),
     path(
-        "days/<date:date>/meals/<int:meal_id>/records/create",
-        views.create_record,
-        name="create-record",
+        "days/<date:date>/meals/<int:meal_id>/records/",
+        include((
+            [
+                path(
+                    "create",
+                    views.create_record,
+                    name="create",
+                ),
+                path(
+                    'items',
+                    views.index_items,
+                    name="items"
+                )
+            ],
+            "records",
+        )),
     ),
     path(
         "days/<date:date>/meals/<int:meal_id>/records/<int:record_id>/edit",
         views.edit_record,
         name="edit-record",
-    ),
-    path("items/", views.index_items, name="index-items"),
+    )
 ]

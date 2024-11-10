@@ -1,8 +1,22 @@
 {% load i18n %}
 <dialog id="record-dialog"
         x-ref="recordDialog"
-        class="p-4 w-[330px] h-[480px] overflow-hidden max-h-none"
-        @open-record-dialog.window="$el.showModal()"
-        @close-record-dialog.window="$el.close()">
-    <div id="record-form"></div>
+        class="p-4 w-[330px] h-[480px] overflow-hidden max-h-none flex flex-col gap-4"
+        hx-swap-oob="true"
+        x-init="$el.showModal(); $refs['item{{ item.id }}'].scrollIntoView({block: 'center'})"
+        @close-record-dialog.window="$el.close()"
+        x-data="{ item: {{ item.id }} }">
+        <h2 class="block text-center text-lg font-semibold">
+            {% if record_form.instance.id %}
+                {% translate "Edit record" %}
+            {% else %}
+                {% translate "Add new record" %}
+            {% endif %}
+        </h2>
+    {% include "food/forms/item_search_form.html" with form=item_search_form %}
+    <div id="items"
+         class="flex-1 flex flex-col min-h-0 overflow-y-scroll">
+        {% include "food/items.html" %}
+    </div>
+    {% include "food/forms/record_form.html" with form=record_form %}
 </dialog>
