@@ -7,10 +7,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.http import QueryDict
+from django.forms import modelform_factory
+from django.core.exceptions import FieldError
 from django_htmx.http import trigger_client_event
 
 from ..forms import RecordForm
-from ..models import Day
+from ..models import Day, Record
 
 
 @require_GET
@@ -71,13 +73,15 @@ class RecordView(LoginRequiredMixin, View):
             return HttpResponseBadRequest()
 
         position = meal.records.count()
-        record = meal.records.create(**record_form.cleaned_data, position=position)
+        record = meal.records.create(
+            **record_form.cleaned_data, position=position
+        )
 
         response = render(
             request,
             "food/htmx/store_record.html",
             {"day": day, "meal": meal, "record": record},
-            status=201
+            status=201,
         )
         return trigger_client_event(response, "close-record-dialog")
 
@@ -93,8 +97,15 @@ class RecordView(LoginRequiredMixin, View):
         record = get_object_or_404(meal.records, id=record_id)
 
         form_data = QueryDict(request.body)
-        record_form = RecordForm(request.user, form_data, instance=record)
-        if not record_form.is_valid():
+        try:
+            RecordForm = modelform_factory(
+                Record, form=RecordForm, fields=form_data.keys()
+            )
+        except FieldError:
+            return HttpResponseBadRequest()
+        record_form = RecordForm(form_data, instance=record)
+
+        if not record_form.is_valid() or not record_form.has_changed():
             return HttpResponseBadRequest()
 
         record = record_form.save()

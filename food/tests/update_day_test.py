@@ -11,7 +11,7 @@ from django.test.client import MULTIPART_CONTENT
 from ..models import Day, Meal
 
 
-class UpdateMealTest(TestCase):
+class UpdateDayTest(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create(username="testuser")
         self.client.force_login(self.user)
@@ -53,8 +53,58 @@ class UpdateMealTest(TestCase):
         self.day.refresh_from_db()
         self.assertEqual(self.day.weight, new_weight)
 
+        response = self.client.get(
+            reverse("food:days", kwargs=dict(date=self.day.date))
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "food/weight.html")
+        self.assertContains(response, round(self.day.weight))
+
+    def test_weight_remains_after_changing_lock_state(self):
+        self.assertIsNone(self.day.weight)
+        new_weight = randint(60, 80)
+        response = self.client.patch(
+            reverse("food:days", kwargs=dict(date=self.day.date)),
+            urlencode({"weight": new_weight}),
+        )
+        self.assertEqual(response.status_code, 204)
+        self.day.refresh_from_db()
+        self.assertEqual(self.day.weight, new_weight)
+
+        self.assertFalse(self.day.is_locked)
+        response = self.client.patch(
+            reverse("food:days", kwargs=dict(date=self.day.date)),
+            urlencode({"is_locked": True}),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.day.refresh_from_db()
+        self.assertTrue(self.day.is_locked)
+        self.assertEqual(self.day.weight, new_weight)
+
+        response = self.client.patch(
+            reverse("food:days", kwargs=dict(date=self.day.date)),
+            urlencode({"is_locked": False}),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.day.refresh_from_db()
+        self.assertFalse(self.day.is_locked)
+        self.assertEqual(self.day.weight, new_weight)
+
     def test_sending_empty_form_responds_400(self):
         response = self.client.patch(
             reverse("food:days", kwargs=dict(date=self.day.date)),
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_sending_invalid_fields_responds_400(self):
+        response = self.client.patch(
+            reverse("food:days", kwargs=dict(date=self.day.date)),
+            urlencode({"invalid-field": "abcdef"}),
+        )
+        self.assertEqual(response.status_code, 400)
+
+        response = self.client.patch(
+            reverse("food:days", kwargs=dict(date=self.day.date)),
+            urlencode({"weight": 100, "invalid-field": "abcdef"}),
         )
         self.assertEqual(response.status_code, 400)

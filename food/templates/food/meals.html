@@ -2,9 +2,9 @@
      x-data
      x-sort="$item.position = $position"
      hx-swap-oob="true"
-     class="">
+     class="w-full">
     {% for meal in day.meals.all %}
         {% include "food/meal.html" %}
     {% endfor %}
-    
+
 </div>

@@ -9,6 +9,8 @@ from django.http import (
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
+from django.forms import modelform_factory
+from django.core.exceptions import FieldError
 
 from ..forms import DateForm, DayForm
 from ..models import Day
@@ -44,9 +46,14 @@ class DayView(LoginRequiredMixin, View):
         day = Day.objects.get_or_create(user=request.user, date=date)[0]
 
         form_data = QueryDict(request.body)
+        try:
+            DayForm = modelform_factory(Day, fields=form_data.keys())
+        except FieldError:
+            return HttpResponseBadRequest()
+
         day_form = DayForm(form_data, instance=day)
 
-        if not day_form.is_valid() or len(day_form.data) == 0:
+        if not day_form.is_valid() or not day_form.has_changed():
             return HttpResponseBadRequest()
 
         day_form.save()

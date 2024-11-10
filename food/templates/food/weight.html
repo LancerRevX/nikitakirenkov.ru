@@ -12,6 +12,8 @@
             <span>{% translate "kg" %}</span>
         </article>
     {% elif day.weight is not None %}
-        <div>{{ day.weight }} {% translate "kg" %}</div>
+        <div class="mb-4">
+            {% translate "Weight" %}: {{ day.weight }} {% translate "kg" %}
+        </div>
     {% endif %}
 </div>

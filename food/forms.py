@@ -70,11 +70,8 @@ class ItemSearchForm(forms.Form):
 class RecordForm(forms.ModelForm):
     template_name = "food/forms/record_form.html"
 
-    def __init__(self, user, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["item"] = forms.ModelChoiceField(
-            user.food_items.all(), required=True, initial=None
-        )
 
     class Meta:
         model = Record
