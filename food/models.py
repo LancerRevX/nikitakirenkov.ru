@@ -212,7 +212,8 @@ class Item(models.Model):
             result.append(str(self.type))
         if self.brand is not None:
             result.append(str(self.brand))
-        result.append(self.name)
+        if self.name is not None:
+            result.append(self.name)
         if self.restaurant is not None:
             result.append(f"({self.restaurant})")
         # if self.groups.count() > 0:
