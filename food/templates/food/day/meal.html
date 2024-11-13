@@ -37,23 +37,31 @@
         </header>
     {% endif %}
     <div class="p-3 flex flex-col gap-3 bg-white">
-        {% include "food/records.html" %}
+        <div id="meal-{{ meal.position }}-records"
+             x-data
+             x-sort
+             hx-swap-oob="true"
+             class="flex flex-col gap-2">
+            {% for record in meal.records.all %}
+                {% include "food/day/meal/record.html" %}
+            {% endfor %}
+        </div>
         {% if not day.is_locked %}
-        <button class="py-1 w-full flex justify-center rounded-lg border-2 border-lime-500 bg-lime-300 cursor-pointer"
-                title="{% translate "Add new record" %}"
-                hx-get="{% url "food:records:create" date=day.date meal_id=meal.id %}"
-                hx-swap="none"
-                hx-indicator="#indicator">
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 fill="none"
-                 viewBox="0 0 24 24"
-                 stroke-width="2"
-                 stroke="currentColor"
-                 class="size-4 text-lime-600">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-        </button>
+            <button class="py-1 w-full flex justify-center rounded-lg border-2 border-lime-500 bg-lime-300 cursor-pointer"
+                    title="{% translate "Add new record" %}"
+                    hx-get="{% url "food:records:create" date=day.date meal_id=meal.id %}"
+                    hx-swap="none"
+                    hx-indicator="#indicator">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke-width="2"
+                     stroke="currentColor"
+                     class="size-4 text-lime-600">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+            </button>
         {% endif %}
     </div>
-    {% include "food/meal_summary.html" %}
+    {% include "food/day/meal/summary.html" %}
 </article>

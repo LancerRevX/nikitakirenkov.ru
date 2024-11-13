@@ -11,6 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.forms import modelform_factory
 from django.core.exceptions import FieldError
+from django.template.loader import render_to_string
 
 from ..forms import DateForm, DayForm, ItemSearchForm
 from ..models import Day
@@ -34,11 +35,23 @@ class DayView(LoginRequiredMixin, View):
             day = {"date": date}
 
         if request.htmx:
-            return render(request, "food/htmx/index.html", {"day": day})
+            template_names = [
+                "food/day/date.html",
+                "food/day/lock.html",
+                "food/day/weight.html",
+                "food/day/meals.html",
+                'food/day/add_meal_button.html',
+                "food/day/summary.html",
+            ]
+            html = "".join(
+                render_to_string(template_name, {"day": day}, request)
+                for template_name in template_names
+            )
+            return HttpResponse(html, status=200)
 
         return render(
             request,
-            "food/index.html",
+            "food/day.html",
             {"day": day, "user": request.user},
         )
 

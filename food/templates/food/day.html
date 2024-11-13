@@ -6,8 +6,7 @@
         <meta name="description" content="">
         <meta name="keywords" content="">
         <meta charset="UTF-8" />
-        <meta name="viewport"
-              content="width=device-width, initial-scale=1.0" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{% translate "food"|title %}</title>
         <script defer src="{% static "food/record.js" %}"></script>
         {% if not day.is_locked %}
@@ -33,15 +32,15 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                 </svg>
             </button>
-            {% include "food/date.html" %}
-            {% include "food/day_lock.html" %}
+            {% include "food/day/date.html" %}
+            {% include "food/day/lock.html" %}
         </header>
         <main class="mt-12 mb-12 p-4 pb-0 max-w-sm mx-auto flex flex-col items-center">
-            {% include "food/weight.html" %}
-            {% include "food/meals.html" %}
-            {% include "food/add_meal_button.html" %}
+            {% include "food/day/weight.html" %}
+            {% include "food/day/meals.html" %}
+            {% include "food/day/add_meal_button.html" %}
         </main>
-        {% include "food/day_summary.html" %}
+        {% include "food/day/summary.html" %}
         {% include "food/burger_menu.html" %}
         <div id="record-dialog"></div>
         <div id="indicator"
