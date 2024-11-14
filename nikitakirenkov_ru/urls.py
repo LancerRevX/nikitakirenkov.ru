@@ -23,10 +23,10 @@ urlpatterns = [
     path("_nested_admin/", include("nested_admin.urls")),
     path("__reload__/", include("django_browser_reload.urls")),
     path("auth/", include("django.contrib.auth.urls")),
+    path("food/", include("food.urls")),
 ]
 
 urlpatterns += i18n_patterns(
     path("admin/", admin.site.urls),
-    path("food/", include("food.urls")),
     path("tasks/", include("tasks.urls")),
 )

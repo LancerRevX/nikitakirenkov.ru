@@ -2,7 +2,6 @@ django == 5.0
 django-nested-admin
 django-extensions
 django-browser-reload
-django-tailwind
-django-htmx
+djangorestframework
 python-dotenv
 psycopg2
