@@ -2,10 +2,23 @@ from rest_framework import serializers
 
 from .models import Day, Meal, Record, Item, Group
 
+class ItemSerializer(serializers.ModelSerializer):
+    type = serializers.StringRelatedField()
+    brand = serializers.StringRelatedField()
+    restaurant = serializers.StringRelatedField()
+    name = serializers.StringRelatedField()
+
+    class Meta:
+        model = Item
+        fields = ["id", "type", "brand", "restaurant", "name", "groups"]
+        
+
 class RecordSerializer(serializers.ModelSerializer):
+    item = ItemSerializer()
+    
     class Meta:
         model = Record
-        fields = ['id', 'position']
+        fields = ['id', 'position', 'item']
 
 class MealSerializer(serializers.ModelSerializer):
     records = RecordSerializer(many=True)
@@ -21,19 +34,7 @@ class DaySerializer(serializers.ModelSerializer):
 
 
 
-class ItemSerializer(serializers.HyperlinkedModelSerializer):
-    type = serializers.StringRelatedField()
-    brand = serializers.StringRelatedField()
-    restaurant = serializers.StringRelatedField()
-    name = serializers.StringRelatedField()
 
-    class Meta:
-        model = Item
-        fields = ["url", "type", "brand", "restaurant", "name", "groups"]
-        extra_kwargs = {
-            "url": dict(view_name="food:item-detail"),
-            "groups": dict(view_name="food:group-detail"),
-        }
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
