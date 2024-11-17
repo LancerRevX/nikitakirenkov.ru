@@ -1,26 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
-from django.conf import settings
-
-
-class Group(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        models.CASCADE,
-        verbose_name=_("user"),
-        related_name="task_groups",
-    )
-    slug = models.SlugField(_("slug"))
-    name = models.CharField(_("name"), max_length=32)
-    color = models.CharField(_("color"), max_length=7, null=True, blank=True)
-    # can_be_failed = models.BooleanField(_("can be failed"), default=False)
-
-    def get_absolute_url(self):
-        return reverse("index-tasks", kwargs={"group_slug": self.slug})
-
-    def __str__(self) -> str:
-        return f"{self.name}"
+from django.contrib.auth import get_user_model
 
 
 class Task(models.Model):
@@ -39,8 +20,12 @@ class Task(models.Model):
         Status.FAILED: "tasks/icons/x_mark.html",
     }
 
-    group = models.ForeignKey(
-        Group, models.CASCADE, verbose_name=_("group"), related_name="tasks"
+    user = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        related_name="tasks",
+        verbose_name=_("user"),
+        null=True, blank=True
     )
     text = models.CharField(_("text"), max_length=128)
     parent = models.ForeignKey(
@@ -52,7 +37,7 @@ class Task(models.Model):
         default=Status.ACTIVE,
         max_length=max(map(len, Status.values)),
     )
-    position = models.IntegerField(_("position"))
+    position = models.IntegerField(_("position"), default=0)
 
     datetime = models.DateTimeField(_("date and time"), null=True, blank=True)
     created_at = models.DateTimeField(_("created at"), auto_now_add=True)
@@ -79,9 +64,9 @@ class Task(models.Model):
 
     def __str__(self) -> str:
         if self.parent is None:
-            return f"{self.group.name}#{self.position} {self.text}"
+            return f"#{self.position} {self.text}"
         else:
-            return f"{self.parent.text}#{self.position} {self.text}"
+            return f"#{self.position} {self.text}"
 
     class Meta:
         ordering = ["position"]

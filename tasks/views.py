@@ -7,25 +7,19 @@ from django.http import (
 )
 from django.views.decorators.http import require_GET, require_POST
 from django.db import transaction
+from django.contrib.auth.decorators import login_required
 import jinjax
 
-from .models import Group, Task
+from .models import Task
 from .forms import TaskForm
 
 
 @require_GET
-def index_tasks(request: HttpRequest, group_slug=None):
-    return render(request, "index.jinja")
-    return jinjax.Catalog().render("HomePage")
+@login_required
+def index_tasks(request: HttpRequest):
+    tasks = request.user.tasks.all()
 
-    if group_slug is None:
-        if group := Group.objects.first():
-            return redirect("index-tasks", group_slug=group.slug)
-    else:
-        group = get_object_or_404(Group, slug=group_slug)
-
-    if group is not None:
-        tasks = group.tasks.filter(parent=None)
+    return render(request, "tasks/index.jinja", {"tasks": tasks})
 
     return render(
         request,
