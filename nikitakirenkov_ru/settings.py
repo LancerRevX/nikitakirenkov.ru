@@ -27,7 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-t@^iuc40=bc_b0)zh@^ld5(v$4kr6_6r+ganat=+)oh9-mzxc1"
+SECRET_KEY = (
+    "django-insecure-t@^iuc40=bc_b0)zh@^ld5(v$4kr6_6r+ganat=+)oh9-mzxc1"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = environ.get("DEBUG")
@@ -53,6 +55,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "django_htmx",
     "tailwind",
+    "nikitakirenkov_ru",
     "theme",
     "django_browser_reload",
     "nested_admin",
@@ -94,6 +97,11 @@ TEMPLATES = [
             ],
         },
     },
+    {
+        "BACKEND": "django.template.backends.jinja2.Jinja2",
+        "APP_DIRS": True,
+        "OPTIONS": {"environment": "nikitakirenkov_ru.jinja.environment"},
+    },
 ]
 
 WSGI_APPLICATION = "nikitakirenkov_ru.wsgi.application"
@@ -117,7 +125,10 @@ DATABASES = {
 
 if "test" in sys.argv:
     DATABASES = {
-        "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": "db.sqlite3"}
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": "db.sqlite3",
+        }
     }
 
 

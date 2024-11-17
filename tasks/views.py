@@ -7,6 +7,7 @@ from django.http import (
 )
 from django.views.decorators.http import require_GET, require_POST
 from django.db import transaction
+import jinjax
 
 from .models import Group, Task
 from .forms import TaskForm
@@ -14,6 +15,9 @@ from .forms import TaskForm
 
 @require_GET
 def index_tasks(request: HttpRequest, group_slug=None):
+    return render(request, "index.jinja")
+    return jinjax.Catalog().render("HomePage")
+
     if group_slug is None:
         if group := Group.objects.first():
             return redirect("index-tasks", group_slug=group.slug)
