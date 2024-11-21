@@ -68,6 +68,8 @@ TAILWIND_APP_NAME = "theme"
 
 NPM_BIN_PATH = environ["NPM_BIN_PATH"]
 
+AUTH_USER_MODEL = 'users.User'
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
